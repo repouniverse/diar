@@ -1,8 +1,16 @@
+<?php  use yii\grid\GridView;?>
 <?=$contenidoSinGrilla?>
 <div style="position:absolute; width:80%; left:<?php echo $modelo->x_grilla; ?>px; top:<?php echo $modelo->y_grilla; ?>px">
-<?php
-//use yii\grid\GridView;
-use kartik\grid\GridView;
+<?php if(true /*empty($modelo->vistaalterna)*/) {   ?>
+   <?php echo $this->render($modelo->vistaalterna,
+           [
+       'dataProvider'=>$dataProvider
+           ]);  ?> 
+<?php }else {    ?> 
+ <?php 
+   
+  
+//use kartik\grid\GridView;
 // echo $hojaestilo; yii::app()->end();
 //var_dump($modelo->tienecabecera);
 // ?>
@@ -26,5 +34,5 @@ echo GridView::widget([
 
 </div>
 
-
+<?php }?>
 

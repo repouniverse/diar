@@ -73,14 +73,14 @@ return \yii\helpers\Html::checkbox('facturable[]', $model->facturable, [ 'disabl
    
    
    ?>
-        <?php 
+        <?php  
        
         echo GridView::widget([
              'id' => 'kv-grid-demo',
         'dataProvider' => $dataProvider,
          //'summary' => '',
         // 'tableOptions'=>['class'=>'table table-condensed table-hover table-bordered table-striped'],
-        'filterModel' => $searchModel,
+       // 'filterModel' => $searchModel,
         'columns' => $gridColumns,
            //  'pjax' => true, // pjax is set to always true for this demo
             //'toggleDataContainer' => ['class' => 'btn-group mr-2'],

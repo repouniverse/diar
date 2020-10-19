@@ -408,7 +408,12 @@ Datos de caché de configuración se han actualizado');
         ]);
     }
 public function actionRutas(){
-    
+    yii::error('rutas');
+     $rol=\frontend\modules\sigi\models\SigiFacturacion::findOne(89);
+    $rol->createAutoFac();
+    echo "ya  ";
+    die();
+    //\frontend\modules\sigi\models\Edificios::findOne(22)->unidadesImputablesPadres();die();
      $auth = Yii::$app->authManager;
      $rol=\frontend\modules\sigi\models\users\SignupForm::ROL_PROPIETARIO;
                $authorRole = $auth->getRole($rol);

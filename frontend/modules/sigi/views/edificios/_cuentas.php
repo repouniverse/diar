@@ -43,6 +43,11 @@ use frontend\modules\sigi\models\SigiCuentasSearch;
                      
                         
                         },
+                                
+                                'edit' => function ($url,$model) {
+			    $url= Url::to(['edita-cuenta','id'=>$model->id,'gridName'=>'grilla-cuentas','idModal'=>'buscarvalor']);
+                              return \yii\helpers\Html::a('<span class="btn btn-success glyphicon glyphicon-pencil"></span>', $url, ['data-pjax'=>'0','class'=>'botonAbre']);
+                            },
                         'delete' => function ($url,$model) {
 			   $url = \yii\helpers\Url::toRoute($this->context->id.'/deletemodel-for-ajax');
                               return \yii\helpers\Html::a('<span class="btn btn-danger glyphicon glyphicon-trash"></span>', '#', ['title'=>$url,/*'id'=>$model->codparam,*/'family'=>'holas','id'=>\yii\helpers\Json::encode(['id'=>$model->id,'modelito'=> str_replace('@','\\',get_class($model))]),/*'title' => 'Borrar'*/]);
@@ -51,6 +56,7 @@ use frontend\modules\sigi\models\SigiCuentasSearch;
                     ]
                 ],
             'nombre',
+              'cci',
               'numero',              
             'banco.nombre',
                [

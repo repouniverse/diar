@@ -10,7 +10,7 @@
                     <th>Nombre</th>
                     <th>Area(m2)</th>
                    
-                    <th>Participacion</th>
+                    <th>Participación</th>
                   </tr>
                   </thead>
                   <tbody>

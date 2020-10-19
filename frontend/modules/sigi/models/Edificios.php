@@ -185,9 +185,10 @@ class Edificios extends \common\models\base\modelBase
      * son padres, o representan una cobranza,      * 
      */
     public function unidadesImputablesPadres(){
-         return $this->queryUnidades()->andWhere([
+        return $this->queryUnidades()->andWhere([
              'imputable'=>'1',
                 ])->andWhere(['parent_id'=>null])->all(); 
+         
     }
       
       /* Deparatamenteos o unidades  ademas

@@ -58,6 +58,8 @@ phpunit.phar
 *.gif*
 *.log*
 *.sql*
+*.sh*
+*.yml*
 
 
 

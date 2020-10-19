@@ -129,13 +129,21 @@ class SigiFacturacion extends \common\models\base\modelBase
      * Solo aquellos de emisor interno JDp y que sean respuestables 
      */
     public function createAutoFac(){
+        yii::error('generate');
         $scenario= SigiCuentaspor::SCENARIO_RECIBO_AUTOMATICO;
        $edificio= Edificios::findOne($this->edificio_id);
+       yii::error(count($edificio->cargos));
+       yii::error($edificio->id);
       foreach($edificio->cargos as $cargo){
-            //yii::error('inicnado segundo bucle ');
+            yii::error('inicnado segundo bucle ');
+             yii::error(count($cargo->sigiCargosedificios));
           foreach($cargo->sigiCargosedificios as $colector){
               
               /*Si el registro es un presupeusto y aun no está registrado*/
+               yii::error('es budget');
+              yii::error($colector->isBudget());
+               yii::error('has reciobo auto');
+                  yii::error(!$this->hasReciboAuto($colector->id));
              if($colector->isBudget() && !$this->hasReciboAuto($colector->id)) {
                        
                  $model=new SigiCuentaspor();
@@ -143,11 +151,12 @@ class SigiFacturacion extends \common\models\base\modelBase
                       $model->setAttributes($this->prepareFieldsAuto($edificio, $colector));
                       // yii::error($model->attributes);  
                       IF($model->save()){
-                         //yii::error('grabo');  
+                         yii::error('grabo');  
                       }ELSE{
-                         //yii::error($model->getFirstError()); 
+                          
+                         yii::error('error  :'.$model->getFirstError()); 
                       }
-                // yii::error('El colector is es '.$colector->id);
+                 yii::error('El colector is es '.$colector->id);
                       }
            }
         }
@@ -175,7 +184,7 @@ class SigiFacturacion extends \common\models\base\modelBase
             'edificio_id'=>$this->edificio_id,
             'facturacion_id'=>$this->id,
             'numerodoc'=>$edificio->codigo. SigiCuentaspor::COD_RECIBO_INTERNO.'-AB-00034',
-            'descripcion'=>$colector->cargo->descargo,
+            'descripcion'=>substr($colector->cargo->descargo,0,40),
             'mes'=>$this->mes,
             'anio'=>$this->ejercicio,
             'codestado'=> SigiCuentaspor::ESTADO_CREADO,
@@ -277,6 +286,7 @@ class SigiFacturacion extends \common\models\base\modelBase
     }
     
     public function idsToFacturacion(){
+       
        return  array_column($this->getSigiDetfacturacion()->
                 select('identidad')->distinct()
                 ->all(),'identidad');
@@ -566,7 +576,7 @@ class SigiFacturacion extends \common\models\base\modelBase
      }
       
      foreach($unidades as $unidad){
-         //yii::error(' Recorriendo unidad  '.$unidad->numero);
+         yii::error(' Recorriendo unidad  '.$unidad->numero);
          ///verficando primero si la unidad ha sido transferida 
         $diasEnEsteMes=date('t',strtotime($this->swichtDate('fecha',false)));
          //yii::error(' Dias en este mes '.$diasEnEsteMes);

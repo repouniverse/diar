@@ -18,7 +18,7 @@ class VwSigiLecturasSearch extends VwSigiLecturas
     {
         return [
         
-            [['codigo','codtipo', 'numero', 'nombre','mes','anio'], 'safe'],
+            [['codigo','codtipo', 'numero', 'nombre','mes','anio','flectura','flectura1','edificio_id'], 'safe'],
         
         ];
     }
@@ -79,15 +79,9 @@ if(!empty($this->flectura) && !empty($this->flectura1)){
      public function search($params)
     {
         $query = VwSigiLecturas::find();
-
-        // add conditions that should always apply here
-
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
-        ]);
-
-        $this->load($params);
-
+        ]); $this->load($params);
         if (!$this->validate()) {
             // uncomment the following line if you do not want to return any records when validation fails
             // $query->where('0=1');
@@ -99,7 +93,7 @@ if(!empty($this->flectura) && !empty($this->flectura1)){
             'id' => $this->unidad_id,
             'mes' => $this->mes,
             'anio' => $this->anio,
-            'facturable' => $this->facturable,
+            //'facturable' => $this->facturable,
             'edificio_id' => $this->edificio_id,
            // 'area' => $this->area,
            // 'participacion' => $this->participacion,
@@ -109,7 +103,14 @@ if(!empty($this->flectura) && !empty($this->flectura1)){
         $query->andFilterWhere(['like', 'nombre', $this->nombre])
             ->andFilterWhere(['like', 'numero', $this->numero])
             ->andFilterWhere(['like', 'codigo', $this->codigo]);
-
+if(!empty($this->flectura) && !empty($this->flectura1)){
+         $query->andFilterWhere([
+             'between',
+             'flectura',
+             $this->openBorder('flectura',false),
+             $this->openBorder('flectura1',true)
+                        ]);   
+        }
         return $dataProvider;
     }
       public function searchByEdificio($edificio_id)

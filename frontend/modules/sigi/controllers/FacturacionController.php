@@ -319,7 +319,7 @@ die();*/
       
          $searchModel = new VwSigiLecturasSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
+       // echo $dataProvider->query->createCommand()->rawSql;die();
         return $this->render('lecturas', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,

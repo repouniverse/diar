@@ -115,6 +115,7 @@ use common\widgets\cbodepwidget\cboDepWidget as ComboDep;
                 'buttons' => [
                     'update' => function($url, $model) {
                                     $url="";
+                                    return "";
                                     return Html::a('<span class="btn btn-danger btn-sm glyphicon glyphicon-pencil"></span>', $url, $options/*$options*/);
                           
                         },

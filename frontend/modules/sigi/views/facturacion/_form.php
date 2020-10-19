@@ -25,7 +25,7 @@ use common\widgets\selectwidget\selectWidget;
       <div class="box-header">
         <div class="col-md-12">
             <div class="form-group no-margin">
-                
+             <?php /*var_dump($model->idsToFacturacion());die();*/ ?>   
         <?= Html::submitButton('<span class="fa fa-save"></span>   '.Yii::t('sigi.labels', 'Grabar'), ['class' => 'btn btn-success']) ?>
            <?=Html::button('<span class="fa fa-book-reader"></span>   '.Yii::t('sta.labels', 'Facturar'), ['id'=>'boton_facturacion','class' => 'btn btn-warning'])?>    
         <?=Html::button('<span class="fa fa-book-reader"></span>   '.Yii::t('sta.labels', 'Resetear'), ['id'=>'boton_resetear','class' => 'btn btn-warning'])?>    

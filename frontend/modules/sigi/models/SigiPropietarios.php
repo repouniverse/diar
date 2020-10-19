@@ -62,7 +62,7 @@ class SigiPropietarios extends \common\models\base\modelBase
             [['detalle'], 'string'],
              [['codepa','edificio_id','activo','dni','correo'], 'safe'],
             [['dni'], 'valida_dni'],
-            [['correo', 'dni'], 'unique', 'targetAttribute' => ['correo', 'dni']],
+           // [['correo', 'dni'], 'unique', 'targetAttribute' => ['correo', 'dni']],
             [['codepa'], 'valida_codepa'],
             [['codepa'], 'required', 'on'=>self::SCENARIO_EMPRESA],
             [['id'], 'required', 'on'=>self::SCENARIO_TELEFONO],

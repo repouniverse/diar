@@ -288,7 +288,8 @@ class MakeController extends baseController
   } 
   
   public function actionMultiReport($id,$idsToReport){
-      
+        Yii::$app->response->format = \yii\web\Response::FORMAT_RAW;
+        Yii::$app->response->headers->add('Content-Type', 'application/pdf');
         set_time_limit(0); // 5 minutes 
         ini_set('max_execution_time', 0); //0=NOLIMIT
        if(h::request()->isAjax){
@@ -437,12 +438,14 @@ class MakeController extends baseController
   }
   
   private function contentReport($id, $idfiltro,$model){
-       //$model=$this->findModel($id); 
+       //$model=$this->findModel($id);
+      //die();
        $logo=($model->tienelogo)?$this->putLogo($id, $idfiltro):''; 
        
       $npaginas=$model->numeroPaginas($idfiltro);
       $contenido="";
       $dataProvider=$model->dataProvider($idfiltro);
+      //echo $dataProvider->query->createCommand()->rawSql; die();
       $monto=0;
       $valorAcumulado=0; //Variable para ir sumando algun campo 
       $pageContents=[]; //aray con las paginas cotneido un elemento potr pagina
@@ -455,7 +458,8 @@ class MakeController extends baseController
          $dataProvider->pagination->page = $i-1; //Set page 1
           $dataProvider->refresh(); //Refresh models
           $valorAcumulado=$valorAcumulado+$model->sumDataProvider($dataProvider);
-         $pageContents[]=trim($this->render('reporte',[
+         yii::error('renderizando la vista',__FUNCTION__);
+          $pageContents[]=trim($this->render('reporte',[
              'modelo'=>$model,             
              'dataProvider'=>$dataProvider,
              'contenidoSinGrilla'=>$contenidoSinGrilla,

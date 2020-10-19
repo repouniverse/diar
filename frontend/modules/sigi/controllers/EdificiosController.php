@@ -338,6 +338,36 @@ class EdificiosController extends baseController
        
     }
     
+     public function actionEditaCuenta($id){        
+         $this->layout = "install";
+         $model= \frontend\modules\sigi\models\SigiCuentas::findOne($id);
+       
+       $datos=[];
+        if(h::request()->isPost){
+            $model->load(h::request()->post());
+             h::response()->format = \yii\web\Response::FORMAT_JSON;
+            $datos=\yii\widgets\ActiveForm::validate($model);
+            if(count($datos)>0){
+               return ['success'=>2,'msg'=>$datos];  
+            }else{
+                $model->save();
+                //$model->assignStudentsByRandom();
+                  return ['success'=>1,'id'=>$model->edificio_id];
+            }
+        }else{
+           return $this->renderAjax('_modal_cuenta', [
+                        'model' => $model,
+                        'id' => $id,
+                        'gridName'=>h::request()->get('gridName'),
+                        'idModal'=>h::request()->get('idModal'),
+                        //'cantidadLibres'=>$cantidadLibres,
+          
+            ]);  
+        }
+       
+       
+    }
+    
      public function actionAgregaCuenta($id){        
          $this->layout = "install";
          

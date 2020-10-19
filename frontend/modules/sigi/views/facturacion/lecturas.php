@@ -9,7 +9,7 @@ use yii\widgets\Pjax;
 
 $this->title = Yii::t('sigi.labels', 'Detalle Lecturas ');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('sigi.labels', 'Facturaciones'), 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => Yii::t('sigi.labels', 'Ir a Facturacion'), 'url' => ['update','id'=>$model->id]];
+//$this->params['breadcrumbs'][] = ['label' => Yii::t('sigi.labels', 'Ir a Facturacion'), 'url' => ['update','id'=>$model->id]];
 
 ?>
 <div class="sigi-facturacion-index">
@@ -22,22 +22,8 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('sigi.labels', 'Ir a Factura
     <?php Pjax::begin(); ?>
     <?php  echo $this->render('_searchLecturas', ['model' => $searchModel]); ?>
 
-  
-    
-    <?=ExportMenu::widget([
-    'dataProvider' => $dataProvider,
-    'columns' => $gridColumns,
-    'dropdownOptions' => [
-        'label' => yii::t('sta.labels','Exportar'),
-        'class' => 'btn btn-success'
-    ]
-]) . "<br><hr>\n".GridView::widget([
-        'dataProvider' => $dataProvider,
-      
-     'showPageSummary' => true,
-         'tableOptions'=>['class'=>'table table-condensed table-hover table-bordered table-striped'],
-        //'filterModel' => $searchModel,
-        'columns' => [
+  <?php 
+  $gridColumns=[
             
          
          [
@@ -86,7 +72,23 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('sigi.labels', 'Ir a Factura
                             'pageSummary' => true,
                             ]    ,
              'facturable'
-        ],
+        ];
+  ?>
+    
+    <?=ExportMenu::widget([
+    'dataProvider' => $dataProvider,
+    'columns' => $gridColumns,
+    'dropdownOptions' => [
+        'label' => yii::t('sta.labels','Exportar'),
+        'class' => 'btn btn-success'
+    ]
+]) . "<br><hr>\n".GridView::widget([
+        'dataProvider' => $dataProvider,
+      
+     'showPageSummary' => true,
+         'tableOptions'=>['class'=>'table table-condensed table-hover table-bordered table-striped'],
+        //'filterModel' => $searchModel,
+        'columns' => $gridColumns,
     ]); ?>
     <?php Pjax::end(); ?>
 

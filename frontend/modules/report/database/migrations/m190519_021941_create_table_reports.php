@@ -38,6 +38,8 @@ if ($this->db->schema->getTableSchema(static::NAME_TABLE, true) === null){
 	   'xresumen'=>$this->integer(5),
             'yresumen'=>$this->integer(5),
 	'comercial'=>$this->char(1)->append($this->collateColumn()),
+            /*Para renderizar una vista alternativa en el detalle**/
+            'vistaalterna'=>$this->string(80)->append($this->collateColumn()),
             'tienecabecera'=>$this->char(1)->append($this->collateColumn()),	
             ], $this->collateTable());
         $this->addForeignKey($this->generateNameFk(static::NAME_TABLE), static::NAME_TABLE,

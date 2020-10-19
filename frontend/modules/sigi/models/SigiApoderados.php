@@ -78,6 +78,11 @@ class SigiApoderados extends \common\models\base\modelBase
     {
         return $this->hasOne(Clipro::className(), ['codpro' => 'codpro']);
     }
+    
+    public function getEdificio()
+    {
+        return $this->hasOne(Edificios::className(), ['id' => 'edificio_id']);
+    }
 
     /**
      * {@inheritdoc}

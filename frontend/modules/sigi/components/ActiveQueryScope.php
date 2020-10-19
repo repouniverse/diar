@@ -18,7 +18,7 @@ class ActiveQueryScope extends \yii\db\ActiveQuery
       //var_dump(SigiUserEdificios::filterEdificios());die();
        //$this->andWhere([ 'in', 'codfac',['FIM','FIP'] ]);
       $this->alias('t')->andWhere(['in',
-              'edificio_id', SigiUserEdificios::filterEdificios()
+              't.edificio_id', SigiUserEdificios::filterEdificios()
                ]);
         parent::init();
     }

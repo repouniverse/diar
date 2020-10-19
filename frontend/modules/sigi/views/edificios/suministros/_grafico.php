@@ -8,8 +8,8 @@ use dosamigos\chartjs\ChartJs;
         'height' => 180,
         'width' => 400,
         'title'=>[
-            display=> true,
-            text=> yii::t('sigi.labels','Consumos mensuales'),
+            'display'=> true,
+            'text'=> yii::t('sigi.labels','Consumos mensuales'),
         ],
     ],
     'data' => [

@@ -30,9 +30,10 @@ use Yii;
  */
 class VwSigiLecturas extends \common\models\base\modelBase
 {
-    public $dateorTimeFields=['flectura'=>self::_FDATE];
+    
     public $booleanFields=['facturable'];
     public $flectura1=null;
+    public $dateorTimeFields=['flectura'=>self::_FDATE,'flectura1'=>self::_FDATE];
     /**
      * {@inheritdoc}
      */
