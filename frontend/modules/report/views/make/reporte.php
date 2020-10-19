@@ -1,7 +1,7 @@
 <?php  use yii\grid\GridView;?>
 <?=$contenidoSinGrilla?>
 <div style="position:absolute; width:80%; left:<?php echo $modelo->x_grilla; ?>px; top:<?php echo $modelo->y_grilla; ?>px">
-<?php if(true /*empty($modelo->vistaalterna)*/) {   ?>
+<?php if(false /*empty($modelo->vistaalterna)*/) {   ?>
    <?php echo $this->render($modelo->vistaalterna,
            [
        'dataProvider'=>$dataProvider
