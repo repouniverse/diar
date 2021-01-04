@@ -116,9 +116,9 @@ class SigiFacturacion extends \common\models\base\modelBase
     public function afterSave($insert,$changedAttributes ) {
       if($insert){
           $this->refresh();
-          yii::error('El id d efacturacion es');
-          yii::error($this->id);
-          $this->createAutoFac(); //cREA LOS RECIBOS AUTOMATICOS DEL PRESUPUESTO
+          //yii::error('El id d efacturacion es');
+          ///yii::error($this->id);
+          //$this->createAutoFac(); //cREA LOS RECIBOS AUTOMATICOS DEL PRESUPUESTO
       }
         return parent::afterSave($insert,$changedAttributes );
     }
@@ -226,7 +226,7 @@ class SigiFacturacion extends \common\models\base\modelBase
            $this->shortFactu();           
            $this->asignaIdentidad();//Importante  
            $this->asignaNumero();
-           $this->resolveTransferencias();
+          $this->resolveTransferencias();
            
         }else{
             
@@ -788,7 +788,8 @@ class SigiFacturacion extends \common\models\base\modelBase
          $grupocobranza=(!$unidad->miApoderado()->cobranzaindividual)?$unidad->codpro:$unidad->numero;
          $grupofacturacion=(!$unidad->miApoderado()->facturindividual)?$unidad->codpro:$unidad->numero;
          $identidad=$this->getSigiDetfacturacion()->where(['unidad_id'=>$row['unidad_id']])->one()->identidad;    
-        // var_dump($this->getSigiDetfacturacion()->where(['unidad_id'=>$row['unidad_id']])->createCommand()->getRawSql());
+        
+// var_dump($this->getSigiDetfacturacion()->where(['unidad_id'=>$row['unidad_id']])->createCommand()->getRawSql());
          $day = date('j', strtotime($row['fecha']));
          $this->particionarRecibo($identidad, $day, $grupocobranza, $grupofacturacion);
      }

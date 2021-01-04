@@ -3,6 +3,7 @@
 namespace frontend\modules\sigi\models;
 USE frontend\modules\report\models\Reporte;
 use frontend\modules\sigi\behaviors\FileBehavior;
+use frontend\modules\sigi\behaviors\FileBehavior_residente;
 use common\helpers\timeHelper;
 use common\helpers\h;
 use Yii;
@@ -57,17 +58,17 @@ class SigiKardexdepa extends \common\models\base\modelBase
      public function behaviors()
          {
          
-	return [		
+	/*return [		
 		'fileBehavior' => [
 			'class' => FileBehavior::className()
 		]		
-	];
+	];*/
            
-          /*return [		
+          return [		
 		        'fileBehavior' => [
 			     'class' => FileBehavior_residente::className()
 		           ],
-                    ];*/
+                    ];
          }
     
      public function scenarios() {

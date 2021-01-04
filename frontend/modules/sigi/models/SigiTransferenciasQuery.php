@@ -7,7 +7,7 @@ namespace frontend\modules\sigi\models;
  *
  * @see SigiTransferencias
  */
-class SigiTransferenciasQuery extends \frontend\modules\sigi\components\ActiveQueryScope
+class SigiTransferenciasQuery extends \frontend\modules\sigi\components\ActiveQueryStatusScope
 {
     /*public function active()
     {

@@ -472,30 +472,63 @@ class Edificios extends \common\models\base\modelBase
  } 
  
  public function generateUsers(){
-   /*  $unidades=$this->unidadesImputablesPadres();
+     
+     /*$role=h::gsetting('sigi','roleResidente');
+     YII::ERROR($role,__FUNCTION__);
+                $rol=\Yii::$app->authManager->getRole($role);
+    YII::ERROR($rol,__FUNCTION__);
+     die();*/
+     $unidades=$this->unidadesImputablesPadres();
     foreach($unidades as $unidad){ 
        if(!$unidad->hasUser()){
                $currentProp=$unidad->currentPropietario();
         if(!is_null($currentProp)){
             $correo=$currentProp->correo;
-            yii::error($correo);
+            //yii::error($correo);
            if(!empty($correo)){
-               yii::error('paso');
+               //yii::error('paso');
            
        $usuario= new \frontend\modules\sigi\models\users\SignupForm();
     
        $usuario->email=$correo;
        $usuario->username=$unidad->generateUsername();
        $usuario->password=$unidad->generatePwd();
-       $usuario->signup();
-       yii::error($usuario->username);
-       yii::error($usuario->password);
+      $user= $usuario->signup();
+       $user->refresh();
+       $profile=$user->profile;
+       $profile->tipo='40';
+       $profile->save();
+      // yii::error($user);
+       //yii::error($user->id);
+       
+       
+       SigiUserEdificios::insertUserEdificio($user->id, $this->id);
+       $role=h::gsetting('sigi','roleResidente');
+                $rol=\Yii::$app->authManager->getRole($role);
+                /****LE ASIGNA EL ROL */
+                if(!is_null($rol)){
+                  $vari= Yii::$app->authManager->assign(
+                 $rol,
+                 $user->id); 
+                  //yii::error($vari);
+                  //var_dump($vari);die();
+                }else{
+                    //yii::error('Rol nulo');
+                }
+       
+       
+       
+       //yii::error($usuario->username);
+      // yii::error($usuario->password);
+       
+       
+       
       unset($usuario);
         } 
         }
        }      
-       
-    } */   
+       //die();
+    }    
  }
  /*
   * Esta funcion se encargs de 
@@ -522,6 +555,19 @@ class Edificios extends \common\models\base\modelBase
  public function montoTotalColectores(){
     return round($this->getColectores()->sum('monto'),4);
  }
+ 
+  public function afterSave($insert, $changedAttributes) {
+     if($insert){
+         $this->refresh(); 
+        // yii::error('afer save');
+         //yii::error(h::userId());
+         //yii::error($this->id);
+         SigiUserEdificios::insertUserEdificio(h::userId(),$this->id);
+     }
+     return parent::afterSave($insert, $changedAttributes);
+ }
+ 
+ 
  
 }
  

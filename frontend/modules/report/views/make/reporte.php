@@ -1,19 +1,38 @@
 <?php  use yii\grid\GridView;?>
-<?=$contenidoSinGrilla?>
-<div style="position:absolute; width:80%; left:<?php echo $modelo->x_grilla; ?>px; top:<?php echo $modelo->y_grilla; ?>px">
-<?php if(false /*empty($modelo->vistaalterna)*/) {   ?>
-   <?php echo $this->render($modelo->vistaalterna,
-           [
-       'dataProvider'=>$dataProvider
-           ]);  ?> 
+
+   <?=$contenidoSinGrilla?>
+         <div style="position:absolute; width:90%; left:<?php echo $modelo->x_grilla; ?>px; top:<?php echo $modelo->y_grilla; ?>px">
+             <?php
+                //yii::error($modelo->vistaalterna);
+                    if(!empty($modelo->vistaalterna)) { ?>
+                        
+                         <?php
+                                $grupos=$dataProvider->query->select(['codgrupo','desgrupo'])
+                                    ->distinct()->asArray()->all();
+                                $detalles=$dataProvider->query->select(['codgrupo',
+                                    'desgrupo',
+                                    'descargo','codsuministro','unidades','lanterior','lectura','delta',
+                                    'monto','montototal','simbolo'])
+                                    ->asArray()->all();
+                                echo $this->render($modelo->vistaalterna,[
+                                    'modelo'=>$modelo,
+                                    'grupos'=>$grupos,
+                                    'detalles'=>$detalles,
+                                    ]);
+                         
+                         ?>
+                      
+                     <?php    //$this->render($modelo->vistaalterna);
+                     /*$grupos=$dataProvider->query->select(['desgrupo'])
+                      ->distinct()->asArray()->all();
+                     foreach($grupos as $filaGrupo){
+                         echo $filaGrupo['desgrupo']."<BR>";
+                     }*/
+             ?>
 <?php }else {    ?> 
- <?php 
-   
-  
-//use kartik\grid\GridView;
-// echo $hojaestilo; yii::app()->end();
-//var_dump($modelo->tienecabecera);
-// ?>
+            <?php 
+                    yii::error(' este render NO ES DE LA VISTA ALTERNA ');
+                 ?>
   <?php 
 if(count($columnas)>0)
 echo GridView::widget([
@@ -32,7 +51,8 @@ echo GridView::widget([
     );  ?>
 
 
-</div>
+
 
 <?php }?>
 
+</div>

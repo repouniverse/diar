@@ -5,7 +5,7 @@ namespace frontend\modules\sigi\models;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use frontend\modules\sigi\models\SigiTransferencias;
-use frontend\modules\sigi\models\SigiUnidades;
+
 
 /**
  * SigiTransferenciasSearch represents the model behind the search form of `\frontend\modules\sigi\models\SigiTransferencias`.
@@ -60,12 +60,12 @@ class SigiTransferenciasSearch extends SigiTransferencias
             // $query->where('0=1');
             return $dataProvider;
         }
-       $query->joinWith('unidad d');
-        $query->andFilterWhere(['like','numero',$this->getAttribute('unidad.numero')]);
+       //$query->joinWith('unidad d');
+       // $query->andFilterWhere(['like','numero',$this->getAttribute('unidad.numero')]);
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'd.edificio_id' => $this->edificio_id,
+           // 'd.edificio_id' => $this->edificio_id,
             'unidad_id' => $this->unidad_id,
             'parent_id' => $this->parent_id,
         ]);

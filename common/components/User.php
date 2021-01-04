@@ -144,8 +144,6 @@ class User extends UserOriginal {
       }else{
         yii::error('NO Se encontro un recuerdo ');  
       }
-      
-      
        $url=$this->profile->url;
        if(!empty($url)){
            //yii::error('no esta vacio');
@@ -159,15 +157,13 @@ class User extends UserOriginal {
            //yii::error('url.profile.'.$tipo);
           if(!is_null($url)){
              // yii::error('se leyo del settinds '.$url);
-              
               return $url;
           } else{
-              //yii::error('NO s encontro nad aen l settinfs ');
+              yii::error('NO se encontro nada en l settinfs ');
                $url=is_null(\yii\helpers\Url::previous('intentona'))?'':\yii\helpers\Url::previous('intentona');
           // yii::error('de la intenot a');
            //yii::error($url);
                return $url;
-               
           }
        }
    }

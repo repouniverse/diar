@@ -233,13 +233,7 @@ class Reporte extends baseReporte
                 //where(['and', "esdetalle='1'", "visiblecampo='1'"])->
                 where(["esdetalle"=>'1'])->andWhere(["visiblecampo"=>'1'])->
                 orderBy('orden ASC')->asArray()->all();
-       /* echo  $hijosDetalle=$this->
-                getReportedetalle()->
-                //where(['and', "esdetalle='1'", "visiblecampo='1'"])->
-                where(["esdetalle"=>'1'])->andWhere(["visiblecampo"=>'1'])->createCommand()->getRawSql();die();*/
-       // var_dump($hijosDetalle);die();
-        //yii::error('hijos -------');
-       // yii::error($hijosDetalle);
+      
         $columns=[];
         foreach($hijosDetalle as $fila){
             $elementos=[
@@ -261,27 +255,10 @@ class Reporte extends baseReporte
                      $elementos=array_merge($elementos,['footer' =>'Total: ' ]);
                }
             }
-            
-           /* if($fila['agrupacion']=='1'){
-               
-               $agrupacion=[
-             'group' => true,  // enable grouping
-            'groupFooter' => function ($model, $key, $index, $widget) use($fila) { // Closure method
-                return [
-                    'mergeColumns' => [[0,10]], // columns to merge in summary
-                    'content' => [             // content to show in each summary cell
-                        0 =>$model->{$fila['nombre_campo']},
-                       
-                    ],
-                 
-                ];}
-               ]; 
-            $elementos=array_merge($elementos,$agrupacion);
-            
-            }*/
+           
              $columns[]=$elementos;
         }
-        
+        //var_dump($columns);die();
         return $columns;
     }
     

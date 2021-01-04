@@ -45,6 +45,19 @@ class SigiUnidades extends \common\models\base\modelBase
     {
         return '{{%sigi_unidades}}';
     }
+    
+    
+    public function behaviors()
+         {
+                return [
+		 'auditoriaBehavior' => [
+			'class' => '\common\behaviors\AuditBehavior' ,
+                               ],
+                    ];
+        }
+    
+    
+    
 
     //public $codpadre='';//PARA HACER UN ARTIDFICIO EN LA IMPORTACION DE 
     
@@ -629,9 +642,25 @@ public function hasUser(){
 public function generateUsername(){
    return  $this->edificio->codigo.'.'.$this->numero;
 }
-public static function generatePwd(){
+public  function generatePwd(){
+   return $this->numero;
    return random_int(1000, 9999).'';
 }
+
+public function hasFacturacion($mes,$annio){
+  /*yii::error(SigiDetfacturacion::find()->where([
+       'unidad_id'=>$this->id,
+       'mes'=>$mes,
+       'anio'=>$annio
+           ])->createCommand()->rawSql); */
+   return  SigiDetfacturacion::find()->where([
+       'unidad_id'=>$this->id,
+       'mes'=>$mes,
+       'anio'=>$annio
+           ])->exists();
+}
+
+
 
 
 }

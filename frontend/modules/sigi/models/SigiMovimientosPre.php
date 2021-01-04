@@ -29,6 +29,12 @@ class SigiMovimientosPre extends \common\models\base\modelBase
 {
    const SCE_CREACION_BASICA='basico';
     const SCE_STATUS='status';
+    public $booleanFields=['activo'];
+    public $dateorTimeFields = [
+        'fechaop' => self::_FDATE,
+       'fechaprog' => self::_FDATE,
+        //'ftermino' => self::_FDATETIME
+    ];
     /**
      * {@inheritdoc}
      */
@@ -61,12 +67,12 @@ class SigiMovimientosPre extends \common\models\base\modelBase
             [['idop', 'edificio_id', 'cuenta_id', 'user_id'], 'integer'],
             [['edificio_id', 'cuenta_id', /*'fechaop',*/  'tipomov', 'glosa', 'monto', /*'igv', 'monto_usd',*/ 'activo'], 'required'],
             [['monto', 'igv', 'monto_usd'], 'number'],
-            [['fechaop'], 'string', 'max' => 10],
+           // [['fechaop'], 'string', 'max' => 10],
             [['kardex_id'], 'safe'],
             [['fechacre'], 'string', 'max' => 19],
             [['tipomov'], 'string', 'max' => 3],
             [['glosa'], 'string', 'max' => 40],
-            [['activo'], 'string', 'max' => 1],
+            //[['activo'], 'string', 'max' => 1],
             [['cuenta_id'], 'exist', 'skipOnError' => true, 'targetClass' => SigiCuentas::className(), 'targetAttribute' => ['cuenta_id' => 'id']],
             [['tipomov'], 'exist', 'skipOnError' => true, 'targetClass' => SigiTipomov::className(), 'targetAttribute' => ['tipomov' => 'codigo']],
             [['edificio_id'], 'exist', 'skipOnError' => true, 'targetClass' => Edificios::className(), 'targetAttribute' => ['edificio_id' => 'id']],
@@ -134,21 +140,19 @@ class SigiMovimientosPre extends \common\models\base\modelBase
     }
     
     public static function createBasic($attributes){
-        $model = new SigiMovimientosPre();
-        $model->setAttributes($attributes); 
-        $oldScenario=$model->getScenario();
-        $model->setScenario(self::SCE_CREACION_BASICA);
-       if($model->save()){
-           $model->setScenario($oldScenario);
-            return $model;
-       }else{
-           $model->setScenario($oldScenario);
-           return null; 
-       }
-       
-      
+       // $oldScenario=$model->getScenario();
+        $verifyAttributes=[
+            'kardex_id'=>$attributes['kardex_id'],
+            'tipomov'=>$attributes['tipomov'],
+            ];
+        self::firstOrCreateStatic($attributes,
+                self::SCE_CREACION_BASICA,
+                $verifyAttributes);
+        
         
     }
+    
+    
   /*
    * ESTA FUNCION SE ENCARGA DE SICRONIZAR
    */
@@ -156,21 +160,26 @@ class SigiMovimientosPre extends \common\models\base\modelBase
     IF($this->kardex_id > 0) {
          $kardex=$this->kardex;
         IF($insert){
-            $kardex->cancelado=$kardex::STATUS_CANCELADO_PREV;
+            /*NO tiene sentido en registgros nuevos kardex */
+            
+            //$kardex->cancelado=$kardex::STATUS_CANCELADO_PREV;
+            //SigiKardexdepa::updateAll(['cancelado'=>$kardex::STATUS_CANCELADO_PREV], ['kardex_id'=>$this->kardex_id]);
+          
         }else{
           if($this->hasChanged('activo')){
-           $kardex->cancelado=($this->activo)?
-                   true:
-                   false; 
+              SigiKardexdepa::updateAll(['cancelado'=>($this->activo)?'1':'0'], ['kardex_id'=>$this->kardex_id]);
+          
           }
            
         }
-        $kardex->save();
+        //$kardex->save();
      }      
   }
     
     
   public function beforeSave($insert) {
+      IF(empty($this->fechaop))$this->fechaop=
+      self::SwichtFormatDate (self::CarbonNow()->format(\common\helpers\timeHelper::formatMysqlDate()),'date',true);
       $this->sincronizeStatus($insert);
       return parent::beforeSave($insert);
   }  

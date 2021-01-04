@@ -30,7 +30,7 @@ use common\widgets\selectwidget\selectWidget;
            <?=Html::button('<span class="fa fa-book-reader"></span>   '.Yii::t('sta.labels', 'Facturar'), ['id'=>'boton_facturacion','class' => 'btn btn-warning'])?>    
         <?=Html::button('<span class="fa fa-book-reader"></span>   '.Yii::t('sta.labels', 'Resetear'), ['id'=>'boton_resetear','class' => 'btn btn-warning'])?>    
             <?=Html::button('<span class="fa fa-book-reader"></span>   '.Yii::t('sta.labels', 'Generar Recibos'), ['id'=>'boton_recibos','class' => 'btn btn-warning'])?>    
-         <?=Html::a('<span class="fa fa-file-pdf" ></span>'.'  '.yii::t('sta.labels','Ver Recibos'),Url::to(['/report/make/multi-report','id'=>2,'idsToReport'=> \yii\helpers\Json::encode($model->idsToFacturacion())]),['target'=>'_blank','class'=>"btn btn-success"])?>
+         <?=Html::a('<span class="fa fa-file-pdf" ></span>'.'  '.yii::t('sta.labels','Ver Recibos'),Url::to(['/report/make/multi-report','id'=>$model->reporte_id,'idsToReport'=> \yii\helpers\Json::encode($model->idsToFacturacion())]),['target'=>'_blank','class'=>"btn btn-success"])?>
             <?=Html::a('<span class="fa fa-file-pdf" ></span>'.'  '.yii::t('sta.labels','Ver detalle'),Url::to(['detalle-facturacion','id'=>$model->id]),['target'=>'_blank','data-pjax'=>'0','class'=>"btn btn-success"])?>
         
             </div>

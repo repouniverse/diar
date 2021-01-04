@@ -28,8 +28,6 @@ $this->params['breadcrumbs'][] = $this->title;
          'tableOptions'=>['class'=>'table table-condensed table-hover table-bordered table-striped'],
         'filterModel' => $searchModel,
         'columns' => [
-            
-         
          [
                 'class' => 'yii\grid\ActionColumn',
                 'template' => '{view}',
@@ -42,30 +40,16 @@ $this->params['breadcrumbs'][] = $this->title;
                          },
                     ]
                 ],
-         
-         
-         
-         
-         
-
-           // 'id',
             ['attribute'=>'edificio_id',
                 'filter'=> frontend\modules\sigi\helpers\comboHelper::getCboEdificios(),
                 'value'=>function($model){
                     return $model->edificio->nombre;         
                   }
                 ],
-           ['attribute'=>'unidad.numero',
-                
-                ],
+           ['attribute'=>'unidad.numero',],
             'fecha',
             'nombre',
-            //'nombre',
-            //'correo',
-            //'dni',
-            //'parent_id',
-
-          
+           
         ],
     ]); ?>
     <?php Pjax::end(); ?>

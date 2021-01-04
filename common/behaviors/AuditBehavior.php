@@ -213,6 +213,25 @@ class AuditBehavior extends Behavior
         return !is_null($this->owner->getDb()->getTransaction());
     }
     
-   
+  /*
+   * Rrtorna el valor anterior, si lo hubiera 
+   * de la ultima modificaion en disco
+   * $namField: nombre del campo a invstigar
+   * */
+   public function oldValueField($nameField){
+      //$model=New Activerecordlog();
+       $model=$this->owner;
+     $registro= Activerecordlog::find()->andWhere([
+          'model'=>$model::className(),
+            'clave'=>$model->getPrimaryKey(),
+          'field'=>$nameField,
+      ])->one();
+     if(!is_null($registro)){
+        return  $registro->oldvalue;
+     }else{
+         return false;
+     }
+     
+   }
   
 }

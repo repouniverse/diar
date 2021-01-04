@@ -38,7 +38,7 @@ class SigiUserEdificios extends \common\models\base\modelBase
             [['user_id'], 'integer'],
             [['edificio_id'], 'integer'],
            // [['activa'], 'string', 'max' => 1],
-            [['edificio_id'], 'exist', 'skipOnError' => true, 'targetClass' => Edificios::className(), 'targetAttribute' => ['edificio_id' => 'id']],
+            //[['edificio_id'], 'exist', 'skipOnError' => true, 'targetClass' => Edificios::className(), 'targetAttribute' => ['edificio_id' => 'id']],
         ];
     }
 
@@ -94,6 +94,10 @@ class SigiUserEdificios extends \common\models\base\modelBase
       }
       return $edificios;
     }
+    
+    
+     
+    
     
     /*Refresca los valores de la tabla 
      * segun se hayan agregado faultades 

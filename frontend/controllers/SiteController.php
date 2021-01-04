@@ -408,6 +408,41 @@ Datos de caché de configuración se han actualizado');
         ]);
     }
 public function actionRutas(){
+   var_dump( \frontend\modules\sigi\models\SigiUnidades::findOne(3877)
+           ->oldValueField('parent_id')
+    );
+    die();
+      $carbon=\Carbon\Carbon::now();
+      echo $carbon->format('Y');
+      
+      die();
+      
+      
+    
+    
+    
+    
+    //echo ini_get('session.gc_maxlifetime'); die();
+    $session = Yii::$app->session;
+    $session->open();
+    
+   //$session->destroy();
+    
+          var_dump($session->isActive,$session->id);
+          $session->close();
+          die();
+// abre una sesión
+
+
+// cierra una sesión
+
+
+// destruye todos los datos registrados por la sesión.
+$session->destroy();
+    
+    
+    
+    
     yii::error('rutas');
      $rol=\frontend\modules\sigi\models\SigiFacturacion::findOne(89);
     $rol->createAutoFac();

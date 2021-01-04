@@ -1631,6 +1631,18 @@ public function firstMessage($category=null){
  public function isDateValid($attribute){
     return (!empty($this->{$attribute}) and !$this->dateIsInicial($attribute) );
  }
+ /*
+  * ESTA FUNCION DEVUELVE LA FECHA ACTUAL 
+  * PERO EN FORMATO ESTABECIDO POR LA APLICACION  pejem dd/mm/yyyy
+  * devuelve un string   
+  */
+ public static function currentDateInFormat($dateTime=false){
+     if($dateTime){
+         return self::SwichtFormatDate (self::CarbonNow()->format(\common\helpers\timeHelper::formatMysqlDateTime()),'datetime',true);  
+     }else{
+         return self::SwichtFormatDate (self::CarbonNow()->format(\common\helpers\timeHelper::formatMysqlDate()),'date',true);   
+     }
+ }
  
 }   
 

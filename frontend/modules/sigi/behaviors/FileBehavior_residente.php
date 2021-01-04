@@ -8,15 +8,18 @@ class FileBehavior_residente extends Fibe
     public function  saveUploads($event){
         parent::saveUploads($event);
         //var_dump($this->mail());die();
-        $this->mail();
-        SigiMovimientosPre::createBasic([ 
+        //$this->mail();
+        yii::error('estableciendo ');
+        $valor=SigiMovimientosPre::createBasic([ 
             'kardex_id'=>$this->owner->id,
             'edificio_id'=>$this->owner->edificio_id,
             'cuenta_id'=>$this->owner->edificio->cuentas[0]->id,
             'tipomov'=> \frontend\modules\sigi\models\SigiTipomov::TIPOMOV_DEFAULT,
             'glosa'=>yii::t('sigi.labels','PAGO DE CUOTA').'-'.$this->owner->unidad->numero, 
-            /*'monto'=>$this->owner->montodepa,*/  'activo'=>'1'            
+            'monto'=>$this->owner->facturacion->montoFacturado(), 
+            'activo'=>'1'            
         ]);
+        
         
        // \yii::error('Si salió mal');
         return true; 

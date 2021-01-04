@@ -3,15 +3,25 @@
 namespace frontend\modules\sigi\models;
 use  yii\web\ServerErrorHttpException;
 use Yii;
+use common\behaviors\FileBehavior;
 class SigiLecturas extends \common\models\base\modelBase
 {
     
     public $dateorTimeFields=['flectura'=>self::_FDATE];
     public $booleanFields=['facturable'];
+    public $_codedificio=null;
     /**
      * {@inheritdoc}
      */
     
+     public function behaviors()
+         {
+        return [		
+		        'fileBehavior' => [
+			     'class' => FileBehavior::className()
+		           ],
+                    ];
+         }
     
     const SCENARIO_IMPORTACION='importacion_simple';
     const SCENARIO_SESION='SESION';
@@ -28,7 +38,7 @@ class SigiLecturas extends \common\models\base\modelBase
     {
         return [
             [['suministro_id','lectura','flectura', 'unidad_id', 'mes','anio'], 'required','on'=>'default'],
-              [['flectura'], 'valida_depa'],
+              [['flectura'], 'valida_depa','on'=>self::SCENARIO_IMPORTACION],
             [['mes','anio','edificio_id','flectura'],'required','on'=>self::SCENARIO_SESION],
             
             
@@ -36,9 +46,9 @@ class SigiLecturas extends \common\models\base\modelBase
             //[['suministro_id','mes', 'anio'], 'unique', 'targetAttribute' => ['mes']],
              [['suministro_id', 'unidad_id'], 'integer'],
             [['lectura', 'lecturaant', 'delta'], 'number'],
-           // ['lectura', 'valida_lectura'],
+            ['lectura', 'valida_lectura'],
             [['codepa'], 'string', 'max' => 12],
-             [['mes'], 'safe'],
+             [['mes','codedificio'], 'safe'],
             /*
              * VALIDACIONES GENERALES
              */
@@ -56,8 +66,8 @@ class SigiLecturas extends \common\models\base\modelBase
             // [['codepa'], 'valida_lectura','on'=>self::SCENARIO_IMPORTACION],
             [['flectura'], 'unique', 'targetAttribute' =>['codepa','mes','anio','codedificio', 'codtipo'] ,'on'=>self::SCENARIO_IMPORTACION],
             [['codepa','codedificio','codtipo','mes','anio','lectura','flectura'], 'required','on'=>self::SCENARIO_IMPORTACION],
-             [['codedificio'], 'exist', 'skipOnError' => true, 'targetClass' => Edificios::className(), 'targetAttribute' => ['codedificio' => 'codigo'],'on'=>self::SCENARIO_IMPORTACION],
-             [['codepa'], 'exist', 'skipOnError' => true, 'targetClass' => Edificios::className(), 'targetAttribute' => ['codedificio' => 'codigo']],
+             //[['codedificio'], 'exist', 'skipOnError' => true, 'targetClass' => Edificios::className(), 'targetAttribute' => ['codedificio' => 'codigo'],'on'=>self::SCENARIO_IMPORTACION],
+             //[['codepa'], 'exist', 'skipOnError' => true, 'targetClass' => SigiUnidades::className(), 'targetAttribute' => ['numero' => 'codepa']],
      
             /*Fin de escebnario imortacion*/
             [['mes'], 'integer'],
@@ -71,7 +81,7 @@ class SigiLecturas extends \common\models\base\modelBase
         $scenarios = parent::scenarios(); 
         $scenarios[self::SCENARIO_IMPORTACION] = ['codepa','flectura','codedificio','codtipo','mes','anio','lectura',/*'lecturaant',*/];
        $scenarios[self::SCENARIO_FLAG_FACTURACION] = ['cuentaspor_id'];
-      $scenarios[self::SCENARIO_SESION] = ['mes','anio','edificio_id','flectura'];
+      $scenarios[self::SCENARIO_SESION] = ['lectura', 'lecturaant', 'delta','mes','anio','edificio_id','unidad_id','flectura','suministro_id'];
         return $scenarios;
     }
     
@@ -125,6 +135,8 @@ class SigiLecturas extends \common\models\base\modelBase
     public function beforeSave($insert) {
       if($insert){
           $this->resolveIds();
+          IF(empty($this->codepa))$this->codepa=$this->unidad->numero;
+          
           if($this->isDateForFirstRead(true)){
                $this->lecturaant=$this->lastReadValue(); 
                 $this->delta=$this->lectura;  
@@ -167,21 +179,27 @@ class SigiLecturas extends \common\models\base\modelBase
      public function valida_lectura($attribute, $params)
     {
       /*Validando fecha*/
+         yii::error('validando fecha ',__FUNCTION__);
          //$this->valida_depa($attribute, $params);
          $mes=$this->toCarbon('flectura')->month+0;
         if(!((integer)$this->mes == (integer)$mes)){
             $this->addError('flectura',yii::t('sigi.errors','La fecha no corresponde al mes'));
         }
          
-         
-         
+          yii::error('validando SI ESMERNMO QUE LA LECTURA ANTERIOR ',__FUNCTION__);
+         yii::error($this->lectura,__FUNCTION__);
+         yii::error($this->lastReadNumeric($this->flectura),__FUNCTION__);
          if($this->lectura < $this->lastReadNumeric($this->flectura))
-              $this->addError('lectura','Este valor es menor que la última lectura {\'ultimalectura\'}',['ultimalectura'=>$this->lastReadNumeric()]);
+              $this->addError('lectura',yii::t('base.labels','Este valor es menor que la última lectura {xx}',['xx'=>$this->lastReadNumeric($this->flectura)]));
         
          $medidor=$this->medidor($type=SigiSuministros::COD_TYPE_SUMINISTRO_DEFAULT);
          
+         yii::error('validando SI ES MAYOR QUE UNA LECTURA POSTERIOR ',__FUNCTION__);
       /*Si la lectura corresponde a una nueva lectura */
+         yii::error(!$medidor->isDateForLastRead($this->flectura),__FUNCTION__);
+         
          if(!$medidor->isDateForLastRead($this->flectura)){
+             yii::error($this->nextReadNumeric($this->flectura),__FUNCTION__);
               if($this->lectura > $this->nextReadNumeric($this->flectura))
               $this->addError('lectura','Existe una lectura posterior, y es menor que la lectura que esta intentando ingresar "{{ultimalectura}}"',['ultimalectura'=>$this->nextReadNumeric($this->flectura)]);
            }
@@ -206,7 +224,7 @@ class SigiLecturas extends \common\models\base\modelBase
       }       
    $depa= $this->depa(); 
    if(is_null($depa)){
-          $this->addError('codepa',yii::t('sigi.labels','El codigo de departamento para este edificio no existe'));
+          $this->addError('codepa',yii::t('sigi.labels','El codigo de departamento para este edificio no existe '.$this->getScenario()));
           return;
       } 
   //VERIFICANDO QUE EL DEPA TENGA MDEIDOR DE ESTE TIPO
@@ -218,6 +236,20 @@ class SigiLecturas extends \common\models\base\modelBase
       
         
     }     
+    
+   /* public function getCodigoEdificio(){
+       
+        if(is_null($this->codedificio)){
+            if(empty($this->edificio_id))
+                throw New \yii\web\ServerErrorHttpException(yii::t('base.labels','No existe datos del id edificio y del código tampoco'));   
+             return $this->edificio->codigo;
+            
+        }else{
+            return $this->codedificio;
+        }
+    }*/
+    
+    
     
     private function edificio(){
         $edificio=Edificios::find()->where(['codigo'=>$this->codedificio])->one();
@@ -236,6 +268,10 @@ class SigiLecturas extends \common\models\base\modelBase
             'edificio_id'=>$this->edificio()->id,
             ])->one();
     }
+    
+    
+    
+    
     public function medidor($type=SigiSuministros::COD_TYPE_SUMINISTRO_DEFAULT){
        if($this->suministro_id >0)
          return $this->suministro; 
@@ -451,4 +487,12 @@ class SigiLecturas extends \common\models\base\modelBase
       return ($resultado)?$resultado:0;
              
       }
+      
+  public function beforeValidate() {
+      if(empty($this->codepa) && !empty($this->unidad_id)){
+          $this->codepa=$this->unidad->numero;
+      }          
+      return parent::beforeValidate();
+  }    
+   
 }

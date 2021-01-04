@@ -31,7 +31,7 @@ class SigiPropietarios extends \common\models\base\modelBase
     CONST SCENARIO_EMPRESA='empresa';
     CONST SCENARIO_TELEFONO='telefonos_correos';
     //CONST ROL_PROPIETARIO='r_propietario';
-    public $booleanFields=['espropietario','recibemail'];
+    public $booleanFields=['espropietario','recibemail','activo'];
     /**
      * {@inheritdoc}
      */
@@ -62,11 +62,12 @@ class SigiPropietarios extends \common\models\base\modelBase
             [['detalle'], 'string'],
              [['codepa','edificio_id','activo','dni','correo'], 'safe'],
             [['dni'], 'valida_dni'],
+             //[['activo'], 'safe'],
            // [['correo', 'dni'], 'unique', 'targetAttribute' => ['correo', 'dni']],
             [['codepa'], 'valida_codepa'],
             [['codepa'], 'required', 'on'=>self::SCENARIO_EMPRESA],
             [['id'], 'required', 'on'=>self::SCENARIO_TELEFONO],
-            [['tipo', 'activo'], 'string', 'max' => 1],
+            [['tipo'], 'string', 'max' => 1],
              [['correo', 'correo1', 'correo2'], 'email'],
             [['correo', 'correo1', 'correo2', 'celulares'], 'string', 'max' => 70],
             [['fijo', 'dni'], 'string', 'max' => 12],

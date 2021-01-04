@@ -288,8 +288,8 @@ class MakeController extends baseController
   } 
   
   public function actionMultiReport($id,$idsToReport){
-        Yii::$app->response->format = \yii\web\Response::FORMAT_RAW;
-        Yii::$app->response->headers->add('Content-Type', 'application/pdf');
+       // Yii::$app->response->format = \yii\web\Response::FORMAT_RAW;
+       // Yii::$app->response->headers->add('Content-Type', 'application/pdf');
         set_time_limit(0); // 5 minutes 
         ini_set('max_execution_time', 0); //0=NOLIMIT
        if(h::request()->isAjax){
@@ -301,15 +301,15 @@ class MakeController extends baseController
         //echo "maolde";die();
        $model=$this->findModel($id); 
       
-      // echo $model->dirFile();die(); 
+       //echo $model->dirFile();die(); 
        $this->layout='blank';
        $idsToReport= \yii\helpers\Json::decode($idsToReport);
         $size=h::gsetting('report','sizePage');
-       //print_r($idsToReport);die();
+       //var_dump($size,$idsToReport);die();
        /*vRIFICANDO PRIMERO SI YA EXISTEN UNOS PFDS ANTERIORES */
        // $directorio=$this->dirFile();
        $files= \yii\helpers\FileHelper::findFiles($model->dirFile());
-       //var_dump($files);die();
+      // var_dump($files);die();
          $avance=count($files)*$size;  
             $idsToReport=array_slice($idsToReport,($avance==0)?0:$avance+1);    
                 
@@ -317,37 +317,37 @@ class MakeController extends baseController
       
       // yii::error('Numero maximo de paginas '.$size);
        $arreglos=  array_chunk($idsToReport, $size);
+       //var_dump($arreglos);die();
        foreach($arreglos as $key=>$arreglo){
           $ruta=$model->pathToStoreFile();
-         // yii::error($ruta);
+           yii::error('la ruta');
+          yii::error($ruta);
+          //echo $ruta."<br>";
           $contenido=$this->contentReportMultiple($id, $arreglo,$model);    
-         
+         //print_r($contenido); die();
         $pdf=ModuleReporte::getPdf(); 
          $paginas=count($contenido);
         foreach($contenido as $index=>$pagina){ 
-           // yii::error('pagination '.count($contenido));
-           
+           // yii::error('pagination '.count($contenido));           
                         $pdf->WriteHTML($pagina);
                          // yii::error('index '.$index);
                           // yii::error('paginas '.($paginas-1));
                         if($index < $paginas-1){
-                             //yii::error('agregando pagina');
-                            
+                             yii::error('agregando pagina');     
+                             yii::error($pagina);
                                  $pdf->AddPage();
+                                        }
                         }
-                             
-                                    }
+         yii::error('Escribiendo archivos ...');
         $pdf->output($ruta, \Mpdf\Output\Destination::FILE);
          $model->routesSplit[]=$ruta;
          unset($pdf);
-       }
+       }       
        if(h::request()->isAjax){
            return ['success'=>yii::t('sigi.labels','Se ha completado de generar los recibos')];
-           
        }
        
-       
-          $mpdf = new \Mpdf\Mpdf();
+       $mpdf = new \Mpdf\Mpdf();
            $files= \yii\helpers\FileHelper::findFiles($model->dirFile());
        foreach($files as $route) {
           $mpdf->AddPage();
@@ -433,13 +433,13 @@ class MakeController extends baseController
           //$i++;
           
       }
-      //var_dump(count($content));die();
+      //var_dump($content);die();
       return $content;
   }
   
   private function contentReport($id, $idfiltro,$model){
        //$model=$this->findModel($id);
-      //die();
+      //echo "fallo"; die();
        $logo=($model->tienelogo)?$this->putLogo($id, $idfiltro):''; 
        
       $npaginas=$model->numeroPaginas($idfiltro);
@@ -450,9 +450,7 @@ class MakeController extends baseController
       $valorAcumulado=0; //Variable para ir sumando algun campo 
       $pageContents=[]; //aray con las paginas cotneido un elemento potr pagina
       for($i = 1; $i <= $npaginas; $i++){
-          $ultimapagina=($i==$npaginas);
-          
-        
+          $ultimapagina=($i==$npaginas);  
           $cabecera=$model->putCabecera($id,$idfiltro,$model->campofiltro,$ultimapagina);
       $contenidoSinGrilla=$logo.$cabecera; 
          $dataProvider->pagination->page = $i-1; //Set page 1
@@ -463,11 +461,13 @@ class MakeController extends baseController
              'modelo'=>$model,             
              'dataProvider'=>$dataProvider,
              'contenidoSinGrilla'=>$contenidoSinGrilla,
+             'valorAcumulado'=>$valorAcumulado,
              'columnas'=>$model->makeColumns($idfiltro,$valorAcumulado),   
              'lastPage'=>$npaginas,
               'currentPage'=>$i,
                  ]).$this->pageBreak());
               }
+         yii::error($pageContents);
      return $pageContents;   
   }
   

@@ -109,21 +109,39 @@ use common\widgets\cbodepwidget\cboDepWidget as ComboDep;
    
     <?php
     $gridColumns=[
-         [
+           [
                 'class' => 'yii\grid\ActionColumn',
-                'template' => '{update}',
-                'buttons' => [
-                    'update' => function($url, $model) {
-                                    $url="";
-                                    return "";
-                                    return Html::a('<span class="btn btn-danger btn-sm glyphicon glyphicon-pencil"></span>', $url, $options/*$options*/);
-                          
+                //'template' => Helper::filterActionColumn(['view', 'activate', 'delete']),
+            'template' => '{attach}',
+               'buttons' => [
+                  'attach' => function($url, $model) {  
+                         $url=\yii\helpers\Url::toRoute(['/finder/selectimage','isImage'=>true,
+                             'idModal'=>'imagemodal',
+                             'modelid'=>$model->id,
+                             'extension'=> \yii\helpers\Json::encode(['jpg','png']),
+                             'nombreclase'=> str_replace('\\','_',get_class($model->registroLectura))]);
+                        $options = [
+                            'title' => Yii::t('sta.labels', 'Subir Archivo'),
+                            'data-method' => 'get',
+                            //'data-pjax' => '0',
+                        ];
+                        return Html::button('<span class="glyphicon glyphicon-paperclip"></span>', ['href' => $url, 'title' => 'Adjuntar Voucher de pago', 'class' => 'botonAbre btn btn-success']);
+                        //return Html::a('<span class="btn btn-success glyphicon glyphicon-pencil"></span>', Url::toRoute(['view-profile','iduser'=>$model->id]), []/*$options*/);
                         },
+                        
+                        
+                       /* 'pdf' => function ($url,$model) {
+			   $url = \yii\helpers\Url::toRoute(['/sta/citas/report-inf-psicologico','id'=>$model->id,'gridName'=>'grid_docu','idModal'=>'buscarvalor']);
+                              if($model->cita_id > 0 or $model->codocu=='104')
+                              return \yii\helpers\Html::a('<span class="btn btn-warning fa fa-file-pdf"></span>', $url, ['data-pjax'=>'0','target'=>'_blank']);
+                              return '';
+                             } */
                     ]
-          ],
+                ],
         [ 'attribute' => 'codigo',
              'format'=>'raw',
              'value'=>function($model){
+                    // return 'o';
                  return $model->codigo;  
              }
              ],

@@ -7,6 +7,8 @@ use yii\widgets\ActiveForm;
 use common\widgets\cbodepwidget\cboDepWidget as ComboDep;
 use frontend\modules\sigi\helpers\comboHelper;
 use frontend\modules\sigi\models\SigiUnidades;
+use common\widgets\inputajaxwidget\inputAjaxWidget;
+use yii\widgets\Pjax;
  use kartik\date\DatePicker;
  use common\helpers\h;
 /* @var $this yii\web\View */
@@ -17,7 +19,9 @@ use frontend\modules\sigi\models\SigiUnidades;
 <div class="sigi-transferencias-form">
     
     <br>
-    <?php $form = ActiveForm::begin([
+    <?php 
+    $nuevo=$model->isNewRecord;
+    $form = ActiveForm::begin([
     'fieldClass'=>'\common\components\MyActiveField',
      'enableAjaxValidation'=>true,
     ]); ?>
@@ -26,7 +30,7 @@ use frontend\modules\sigi\models\SigiUnidades;
             <div class="form-group no-margin">
                 
         <?= Html::submitButton('<span class="fa fa-save"></span>   '.Yii::t('sigi.labels', 'Save'), ['class' => 'btn btn-success']) ?>
-            
+         <?= Html::buttonInput(Yii::t('sigi.labels', 'Anular'), ['id'=>'btn-anular','class' => 'btn btn-danger']) ?>    
 
             </div>
         </div>
@@ -66,6 +70,7 @@ use frontend\modules\sigi\models\SigiUnidades;
                                         'campofiltro'=>'edificio_id'  
                                 ]
                                 ],
+                    'inputOptions'=>['disabled'=>(!$nuevo)?'disabled':null]
                             ]
                
                
@@ -80,7 +85,8 @@ use frontend\modules\sigi\models\SigiUnidades;
             dropDownList($data,
                   ['prompt'=>'--'.yii::t('base.verbs','Seleccione un valor')."--",
                     // 'class'=>'probandoSelect2',
-                      //'disabled'=>($model->isBlockedField('codpuesto'))?'disabled':null,
+                      //'disabled'=>(!$nuevo)?'disabled':null,
+                      'disabled'=>(!$nuevo)?'disabled':null,
                         ]
                     ) ?>
   
@@ -99,7 +105,7 @@ use frontend\modules\sigi\models\SigiUnidades;
                                ],
                           
                             //'dateFormat' => h::getFormatShowDate(),
-                            'options'=>['class'=>'form-control']
+                            'options'=>['class'=>'form-control','disabled'=>(!$nuevo)?'disabled':null,]
                             ]) ?>
 
  </div>
@@ -110,22 +116,25 @@ use frontend\modules\sigi\models\SigiUnidades;
             dropDownList($data,
                   ['prompt'=>'--'.yii::t('base.verbs','Seleccione un valor')."--",
                     // 'class'=>'probandoSelect2',
+                    'disabled'=>(!$nuevo)?'disabled':null,
                       //'disabled'=>($model->isBlockedField('codpuesto'))?'disabled':null,
                         ]
                     ) ?>
   
 
  </div>
-  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-     <?= $form->field($model, 'nombre')->textInput(['maxlength' => true]) ?>
+  <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+     <?= $form->field($model, 'nombre')->textInput(['maxlength' => true,'disabled'=>(!$nuevo)?'disabled':null,]) ?>
+
+ </div>
+ 
+          
+  <div class="col-lg-6 col-md-4 col-sm-6 col-xs-12">
+     <?= $form->field($model, 'correo')->textInput(['maxlength' => true,'disabled'=>(!$nuevo)?'disabled':null,]) ?>
 
  </div>
   <div class="col-lg-6 col-md-4 col-sm-6 col-xs-12">
-     <?= $form->field($model, 'correo')->textInput(['maxlength' => true]) ?>
-
- </div>
-  <div class="col-lg-6 col-md-4 col-sm-6 col-xs-12">
-     <?= $form->field($model, 'dni')->textInput(['maxlength' => true]) ?>
+     <?= $form->field($model, 'dni')->textInput(['maxlength' => true,'disabled'=>(!$nuevo)?'disabled':null,]) ?>
 
  </div>
   <div class="col-lg-6 col-md-4 col-sm-6 col-xs-12">
@@ -134,6 +143,7 @@ use frontend\modules\sigi\models\SigiUnidades;
   
                   ['prompt'=>'--'.yii::t('base.verbs','Seleccione un valor')."--",
                     // 'class'=>'probandoSelect2',
+                    'disabled'=>(!$nuevo)?'disabled':null,
                       //'disabled'=>($model->isBlockedField('codpuesto'))?'disabled':null,
                         ]
                     ) ?>
@@ -144,6 +154,22 @@ use frontend\modules\sigi\models\SigiUnidades;
 
 </div>
     </div>
+
+<?php 
+    Pjax::begin(['id'=>'mipjaxcv']);
+        echo inputAjaxWidget::widget([
+      'id'=>'btn-anular',
+            'tipo'=>'get',
+            'evento'=>'click',
+      'isHtml'=>false,
+            'idGrilla'=>'mipjaxcv',
+            'ruta'=>Url::to(['/sigi/transferencias/ajax-anula-transf','id'=>$model->id]),          
+           //'posicion'=> \yii\web\View::POS_END           
+        
+            ]);
+       Pjax::end();
+?>
+
 <?php 
 $source=[SigiUnidades::className()=>
          [

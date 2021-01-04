@@ -171,18 +171,15 @@ class DefaultController extends Controller
        $user= h::user();
        $mail=h::user()->identity->email;
        $propietario= \frontend\modules\sigi\models\SigiPropietarios::find()->andWhere(['correo'=>$mail])->one();
-      if(!is_null($propietario)){
-         
-       $unidad=$propietario->unidad;
-       
+      if(!is_null($propietario)){         
+       $unidad=$propietario->unidad;       
            $medidor=$unidad->firstMedidor(\frontend\modules\sigi\models\SigiSuministros::COD_TYPE_SUMINISTRO_DEFAULT);
             return  $this->render('panel_residente',
-                    ['unidad'=>$unidad,'medidor'=>$medidor]);
-       
-       
+                    ['unidad'=>$unidad,'medidor'=>$medidor]);       
+          
       }else{
           throw new ServerErrorHttpException(yii::t('base.errors','Residente no encontrado con el correo '.$mail));  
-          
+         
       } 
    }
     

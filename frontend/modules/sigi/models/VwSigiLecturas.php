@@ -97,4 +97,10 @@ class VwSigiLecturas extends \common\models\base\modelBase
     {
         return new VwSigiLecturasQuery(get_called_class());
     }
+    
+    
+    public function getRegistroLectura(){
+         return $this->hasOne(SigiLecturas::className(), ['id' => 'id']);
+   
+    }
 }

@@ -165,4 +165,19 @@ class TransferenciasController extends baseController
            
        }
    } 
+   
+  public function actionAjaxAnulaTransf($id){
+     $model=$this->findModel($id);
+     if(h::request()->isAjax){
+         h::response()->format = Response::FORMAT_JSON;
+         yii::error($model->attributes,__FUNCTION__);
+         yii::error($model->activo,__FUNCTION__);
+         if(!$model->activo)
+           return ['error'=>yii::t('base.labels','Esta transferencia está anulada')];
+         $model->activo=false;
+         $model->save();
+         return ['success'=>yii::t('base.labels','Se ha anulado la transferencia')];
+     }
+  } 
+   
 }

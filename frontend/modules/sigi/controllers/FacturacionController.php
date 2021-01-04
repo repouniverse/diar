@@ -358,6 +358,7 @@ die();*/
                                 'mes' => $model->mes,
                                 'facturable' => $model->facturable,
                                 'flectura' => $model->flectura, 
+                                'codedificio'=>$model->codedificio,
                                 'tipomedidor'=>h::request()->post('codtipo'),
                                     ];
             
@@ -372,10 +373,12 @@ die();*/
 
 public function actionTomaLecturas(){
      $model=New \frontend\modules\sigi\models\SigiLecturas();
+     $model->setScenario($model::SCENARIO_SESION);
      $session=h::session();
      if ($session->has('lecturas')){
          //var_dump($session['lecturas']);die();
          $model->edificio_id= $session['lecturas']['edificio_id'];
+        // $model->edificio_id= $session['lecturas']['edificio_id'];
          $model->anio=$session['lecturas']['anio'];
           $model->mes=$session['lecturas']['mes'];
           $model->facturable=true;
@@ -385,13 +388,17 @@ public function actionTomaLecturas(){
                 h::response()->format = Response::FORMAT_JSON;
                 return ActiveForm::validate($model);
         }
-
+        /*$model->load(Yii::$app->request->post());
+       print_r($model->attributes);print_r(Yii::$app->request->post());die();*/
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-           
+             //print_r($model->attributes);print_r(Yii::$app->request->post());die();
             $session->setFlash('success', yii::t('sigi.labels','Se grabó lectura'));
             return $this->redirect(['toma-lecturas','tipomedidor'=>$session['lecturas']['tipomedidor']]);
         }else{
-           
+            if($model->hasErrors())
+            $session->setFlash('error', yii::t('sigi.labels',$model->getFirstError()));
+            //return $this->redirect(['toma-lecturas','tipomedidor'=>$session['lecturas']['tipomedidor']]);
+            
         }
 
         return $this->render('_lectura', [
