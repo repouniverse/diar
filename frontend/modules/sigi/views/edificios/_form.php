@@ -14,7 +14,7 @@ use common\widgets\selectwidget\selectWidget;
 <div class="edificios-form">
     <br>
     <?php $form = ActiveForm::begin([
-    'fieldClass'=>'\common\components\MyActiveField'
+   // 'fieldClass'=>'\common\components\MyActiveField'
     ]); ?>
       <div class="box-header">
         <div class="col-md-12">

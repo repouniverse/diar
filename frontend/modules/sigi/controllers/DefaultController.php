@@ -182,5 +182,22 @@ class DefaultController extends Controller
          
       } 
    }
+   
+  public function actionPanelResidenteInfo(){
+       $user= h::user();
+       $mail=h::user()->identity->email;
+       $propietario= \frontend\modules\sigi\models\SigiPropietarios::find()->andWhere(['correo'=>$mail])->one();
+      if(!is_null($propietario)){         
+            $unidad=$propietario->unidad; 
+            
+           //$medidor=$unidad->firstMedidor(\frontend\modules\sigi\models\SigiSuministros::COD_TYPE_SUMINISTRO_DEFAULT);
+            return  $this->render('panel_residente_info',
+                    ['unidad'=>$unidad]);       
+          
+      }else{
+          throw new ServerErrorHttpException(yii::t('base.errors','Residente no encontrado con el correo '.$mail));  
+         
+      } 
+   } 
     
 }

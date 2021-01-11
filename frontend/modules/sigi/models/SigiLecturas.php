@@ -53,7 +53,7 @@ class SigiLecturas extends \common\models\base\modelBase
              * VALIDACIONES GENERALES
              */
              [['flectura'], 'validate_duplicado','except'=>[self::SCENARIO_IMPORTACION,self::SCENARIO_SESION]],
-          
+             ['lectura','validateActivo'],
             /*******************/
             
              [['codedificio'], 'string', 'max' => 12], 
@@ -79,9 +79,9 @@ class SigiLecturas extends \common\models\base\modelBase
  public function scenarios()
     {
         $scenarios = parent::scenarios(); 
-        $scenarios[self::SCENARIO_IMPORTACION] = ['codepa','flectura','codedificio','codtipo','mes','anio','lectura',/*'lecturaant',*/];
-       $scenarios[self::SCENARIO_FLAG_FACTURACION] = ['cuentaspor_id'];
-      $scenarios[self::SCENARIO_SESION] = ['lectura', 'lecturaant', 'delta','mes','anio','edificio_id','unidad_id','flectura','suministro_id'];
+        $scenarios[self::SCENARIO_IMPORTACION] = ['activo','codepa','flectura','codedificio','codtipo','mes','anio','lectura',/*'lecturaant',*/];
+       $scenarios[self::SCENARIO_FLAG_FACTURACION] = ['activo','cuentaspor_id'];
+      $scenarios[self::SCENARIO_SESION] = ['activo','lectura', 'lecturaant', 'delta','mes','anio','edificio_id','unidad_id','flectura','suministro_id'];
         return $scenarios;
     }
     
@@ -359,9 +359,17 @@ class SigiLecturas extends \common\models\base\modelBase
             throw new ServerErrorHttpException(Yii::t('base.errors', 'Las propiedades {valor} y {campo}  no son las adecuadas ',['valor'=>$this->getAttributeLabel('flectura'),'campo'=>$this->getAttributeLabel('facturable')]));
     		   
     }
+    public function validateActivo(){
+      IF(!$this->suministro->activo){
+          $this->addError('lectura',yii::t('sigi.errors','Este medidor está desactivado'));
+          return;  
+        }  
+    }
   
     public function validate_general($attribute, $params){
         yii::error('**** validategeneral *****'.$this->codepa.'********');
+        
+        
         if($this->hasErrors())
            return;
         yii::error('tene erroes? ');

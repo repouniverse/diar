@@ -432,7 +432,7 @@ class Edificios extends \common\models\base\modelBase
     public function medidoresAaCc(){
        $ids= $this->getUnidades()->select('id')
                 ->where(['imputable'=>'0'])->column();
-      return $this->getSuministros()->where(['unidad_id'=>$ids])->all();
+      return $this->getSuministros()->where(['unidad_id'=>$ids,'activo'=>'1'])->all();
              
    }
    
@@ -493,15 +493,12 @@ class Edificios extends \common\models\base\modelBase
        $usuario->email=$correo;
        $usuario->username=$unidad->generateUsername();
        $usuario->password=$unidad->generatePwd();
-      $user= $usuario->signup();
+      try {
+         $user= $usuario->signup();
        $user->refresh();
        $profile=$user->profile;
        $profile->tipo='40';
-       $profile->save();
-      // yii::error($user);
-       //yii::error($user->id);
-       
-       
+       $profile->save(); 
        SigiUserEdificios::insertUserEdificio($user->id, $this->id);
        $role=h::gsetting('sigi','roleResidente');
                 $rol=\Yii::$app->authManager->getRole($role);
@@ -515,8 +512,14 @@ class Edificios extends \common\models\base\modelBase
                 }else{
                     //yii::error('Rol nulo');
                 }
+      } catch (\yii\db\IntegrityException $ex) {           
        
+      }
+      
+      // yii::error($user);
+       //yii::error($user->id);
        
+      
        
        //yii::error($usuario->username);
       // yii::error($usuario->password);

@@ -277,7 +277,7 @@ class UnidadesController extends baseController
                 $model->save();
                 //yii::error();
                 //$model->assignStudentsByRandom();
-                  return ['success'=>1,'id'=>$model-id];
+                  return ['success'=>1,'id'=>$model->id];
             }
         }else{
            return $this->renderAjax('_modal_medidores', [

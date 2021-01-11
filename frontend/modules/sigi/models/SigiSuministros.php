@@ -20,7 +20,7 @@ use Yii;
  *
  * @property Ums $codum0
  * @property SigiUnidades $unidad
- * @property Clipro $codpro0
+ * @property Clipro $codpro0 
  */
 class SigiSuministros extends \common\models\base\modelBase
 {
@@ -30,6 +30,7 @@ class SigiSuministros extends \common\models\base\modelBase
     CONST COD_TYPE_SUMINISTRO_DEFAULT='101'; //medidor tipo agua 
     const SCENARIO_IMPORTACION='importacion_simple';
      const SCENARIO_CODSUMINISTRO='cod_suministro';
+     public $booleanFields=['activo'];
     public static function tableName()
     {
         return '{{%sigi_suministros}}';
@@ -42,7 +43,7 @@ class SigiSuministros extends \common\models\base\modelBase
     {
         return [
             [['tipo', 'codpro', 'codum', 'unidad_id'], 'required'],
-              [['liminf', 'limsup'], 'safe'],
+              [['liminf', 'limsup','activo'], 'safe'],
             [['unidad_id', 'frecuencia'], 'integer'],
             [['detalles'], 'string'],
             [['tipo'], 'string', 'max' => 3],
