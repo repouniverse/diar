@@ -17,8 +17,9 @@ use frontend\modules\sigi\models\SigiUnidades;
     'fieldClass'=>'\common\components\MyActiveField',
         'enableAjaxValidation' => true
     ]); ?>
-      
+       
       <div class="box-body">
+           <?= Html::submitButton('<span class="fa fa-save"></span>'.'  '.Yii::t('sigi.labels', 'Guardar'), ['class' => 'btn btn-success']) ?>
   <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"> 
     <?= $form->field($model, 'edificio_id')->label(yii::t('sta.labels','Edificio'))->textInput(['value'=>$model->edificio->nombre,'disabled'=>true,'maxlength' => true]) ?>
 
@@ -31,7 +32,7 @@ use frontend\modules\sigi\models\SigiUnidades;
             dropDownList($data,
                   ['prompt'=>'--'.yii::t('base.verbs','Seleccione un valor')."--",
                     // 'class'=>'probandoSelect2',
-                      'disabled'=>true
+                     // 'disabled'=>true
                         ]
                     ) ?>
   
@@ -43,7 +44,7 @@ use frontend\modules\sigi\models\SigiUnidades;
             dropDownList(comboHelper::getCboTipoUnidades(),
                   ['prompt'=>'--'.yii::t('base.verbs','--Seleccione un valor--')."--",
                     // 'class'=>'probandoSelect2',
-                      'disabled'=>'true',
+                      //'disabled'=>'true',
                         ]
                     ) ?>
  </div>
@@ -59,7 +60,7 @@ echo $form->field($model, 'codpro')->
             dropDownList($data,
                   ['prompt'=>'--'.yii::t('base.verbs','Escoja un valor')."--",
                     // 'class'=>'probandoSelect2',
-                      'disabled'=>true,
+                      //'disabled'=>true,
                         ]
                     ) ?>
     </div>    
@@ -75,12 +76,12 @@ echo $form->field($model, 'codpro')->
             dropDownList(comboHelper::getCboPisos(),
                   ['prompt'=>'--'.yii::t('base.verbs','Seleccione un valor')."--",
                     // 'class'=>'probandoSelect2',
-                   'disabled'=>true,
+                  // 'disabled'=>true,
                         ]
                     ) ?>
  </div> 
  <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-     <?= $form->field($model, 'numero')->textInput(['disabled'=>true,'maxlength' => true]) ?>
+     <?= $form->field($model, 'numero')->textInput([/*'disabled'=>true,*/'maxlength' => true]) ?>
   </DIV>
     
          
@@ -89,17 +90,17 @@ echo $form->field($model, 'codpro')->
           
   
  <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-     <?= $form->field($model, 'area')->textInput(['disabled'=>true,'maxlength' => true]) ?>
+     <?= $form->field($model, 'area')->textInput([/*'disabled'=>true,*/'maxlength' => true]) ?>
 
  </div>
   <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-     <?= $form->field($model, 'imputable')->checkBox(['disabled'=>true,]) ?>
+     <?= $form->field($model, 'imputable')->checkBox([/*'disabled'=>true,*/]) ?>
 
  </div>
 
   
   <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-     <?= $form->field($model, 'detalles')->textarea(['disabled'=>true,'rows' => 6]) ?>
+     <?= $form->field($model, 'detalles')->textarea([/*'disabled'=>true,*/'rows' => 6]) ?>
 
  </div>
   <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">

@@ -14,7 +14,7 @@ use frontend\modules\sigi\models\SigiUnidades;
 <div class="sigi-unidades-form">
 
     <?php $form = ActiveForm::begin([
-    'fieldClass'=>'\common\components\MyActiveField',
+    //'fieldClass'=>'\common\components\MyActiveField',
         'enableAjaxValidation' => true
     ]); ?>
       <div class="box-header">
@@ -77,7 +77,7 @@ echo $form->field($model, 'codpro')->
                     ) ?>
     </div>    
  </div> 
-          
+       wewew   
      
   <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
      <?= $form->field($model, 'nombre')->textInput(['maxlength' => true]) ?>

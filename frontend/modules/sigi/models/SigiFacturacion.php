@@ -99,10 +99,11 @@ class SigiFacturacion extends \common\models\base\modelBase
    
     }
     
-    public function getKardexDepa(){
-       return $this->hasMany(SigiKardexdepa::className(), ['facturacion_id' =>'id']);
+     public function getKardexDepa(){
+       return $this->hasOne(SigiKardexdepa::className(), ['id' =>'facturacion_id']);
    
     }
+   
 
     /**
      * {@inheritdoc}
@@ -812,6 +813,23 @@ class SigiFacturacion extends \common\models\base\modelBase
   public function porcentajeCobranza(){
       if($this->montoTotal()<=0) return 0;
       return 100*round($this->montocobrado()/$this->montoTotal(),3);
+  }
+  
+  /*Envia un correo nmasivo a los departamentos para 
+   * entergarles su recibo*/
+  public function sendMassiveRecibo(){
+      $seconds=300;
+      $tolerance=10;
+      set_time_limit($seconds);
+      $registros=SigiKardexdepa::find()->andWhere(['<','enviado',
+          self::CarbonNow()->subSeconds($seconds-$tolerance)->format('Y-m-d H:i:s')
+                   ])->andWhere(['facturacion_id'=>$this->id])->all();
+     /* yii::error(SigiKardexdepa::find()->andWhere(['<','enviado',
+          self::CarbonNow()->subMinutes(10)->format('Y-m-d H:i:s')
+                   ])->andWhere(['facturacion_id'=>$this->id])->createCommand()->rawSql,__FUNCTION__);*/
+      foreach($registros as $kardex){
+         $kardex->mailRecibo();
+      }
   }
    
 }

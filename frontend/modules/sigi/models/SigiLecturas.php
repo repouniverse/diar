@@ -53,7 +53,7 @@ class SigiLecturas extends \common\models\base\modelBase
              * VALIDACIONES GENERALES
              */
              [['flectura'], 'validate_duplicado','except'=>[self::SCENARIO_IMPORTACION,self::SCENARIO_SESION]],
-             ['lectura','validateActivo'],
+           //  ['lectura','validateActivo'],
             /*******************/
             
              [['codedificio'], 'string', 'max' => 12], 
@@ -180,6 +180,18 @@ class SigiLecturas extends \common\models\base\modelBase
     {
       /*Validando fecha*/
          yii::error('validando fecha ',__FUNCTION__);
+         $depa= $this->depa(); 
+   YII::ERROR($depa);
+   if(is_null($depa)){
+       YII::ERROR('DEPA ER ES NULO');
+          $this->addError('codepa',yii::t('sigi.labels','El codigo de departamento para este edificio no existe '.$this->getScenario()));
+          return;
+      }
+      
+            
+      if(!$this->medidor()->activo)
+          $this->addError('codepa',yii::t('sigi.labels','Este suministro está desactivado'.$this->getScenario()));
+          
          //$this->valida_depa($attribute, $params);
          $mes=$this->toCarbon('flectura')->month+0;
         if(!((integer)$this->mes == (integer)$mes)){
@@ -223,7 +235,9 @@ class SigiLecturas extends \common\models\base\modelBase
           return;
       }       
    $depa= $this->depa(); 
+   YII::ERROR($depa);
    if(is_null($depa)){
+       YII::ERROR('DEPA ES NULO');
           $this->addError('codepa',yii::t('sigi.labels','El codigo de departamento para este edificio no existe '.$this->getScenario()));
           return;
       } 
@@ -251,14 +265,14 @@ class SigiLecturas extends \common\models\base\modelBase
     
     
     
-    private function edificio(){
+    private function edificio(){  
         $edificio=Edificios::find()->where(['codigo'=>$this->codedificio])->one();
         //if(is_null($edificio))
           //throw new ServerErrorHttpException(Yii::t('base.errors','El código del edificio {codigo} no existe ',['codigo'=>$this->codedificio]));
     	return $edificio;
     }
     private function depa(){
-        yii::error('funcion depa');
+        yii::error('funcion depa',__FUNCTION__);
         yii::error(SigiUnidades::find()->where([
             'numero'=>$this->codepa,
             'edificio_id'=>$this->edificio()->id,
@@ -359,12 +373,7 @@ class SigiLecturas extends \common\models\base\modelBase
             throw new ServerErrorHttpException(Yii::t('base.errors', 'Las propiedades {valor} y {campo}  no son las adecuadas ',['valor'=>$this->getAttributeLabel('flectura'),'campo'=>$this->getAttributeLabel('facturable')]));
     		   
     }
-    public function validateActivo(){
-      IF(!$this->suministro->activo){
-          $this->addError('lectura',yii::t('sigi.errors','Este medidor está desactivado'));
-          return;  
-        }  
-    }
+    
   
     public function validate_general($attribute, $params){
         yii::error('**** validategeneral *****'.$this->codepa.'********');

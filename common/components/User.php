@@ -113,6 +113,7 @@ class User extends UserOriginal {
                  strtotime($this->lastLogin()))->diffForHumans();
      }   
    
+    
      
    public function getProfile(){
       // var_dump($this->id);

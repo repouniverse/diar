@@ -31,7 +31,7 @@ use frontend\modules\sigi\models\SigiApoderadosSearch;
             'template' => '{update}',
                'buttons' => [
                     'update' => function($url, $model) {  
-                       $url= Url::to(['edita-apoderado','id'=>$model->id,'gridName'=>'grilla-usuarios-edificio','idModal'=>'buscarvalor']);
+                       $url= Url::to(['agrega-user','id'=>$model->id,'gridName'=>'grilla-usuarios-edificio','idModal'=>'buscarvalor']);
                          $options = [
                            'class'=>'botonAbre',
                             //'title' => Yii::t('sta.labels', 'Editar'),

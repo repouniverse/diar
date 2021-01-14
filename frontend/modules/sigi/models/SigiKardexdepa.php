@@ -43,7 +43,7 @@ class SigiKardexdepa extends \common\models\base\modelBase
        const SCE_STATUS='status';
     public $dateorTimeFields = [
         'fecha' => self::_FDATE,
-        
+        'enviado'=>self::_FDATETIME
       
         
        // 'finicio' => self::_FDATETIME,
@@ -87,7 +87,7 @@ class SigiKardexdepa extends \common\models\base\modelBase
            // [['facturacion_id', 'operacion_id', 'edificio_id', 'unidad_id', 'mes'], 'integer'],
             [['monto', 'igv'], 'number'],
             [['detalles'], 'string'],
-             [['cancelado','monto'], 'safe'],
+             [['cancelado','monto','enviado'], 'safe'],
             
             [['fecha'], 'string', 'max' => 10],
             [['anio'], 'string', 'max' => 4],
@@ -166,14 +166,15 @@ class SigiKardexdepa extends \common\models\base\modelBase
     }
     
     public function mailRecibo(){
+       // \Yii::beginProfile('correo_a usuarios');
+
         $mailsPropietarios=$this->unidad->mailsPropietarios();
         $numerorecibo=$this->detallesFactu[0]->numerorecibo;
         if(count($mailsPropietarios)>0){
             $idReport=$this->facturacion->reporte_id;
             $identidad=$this->detallesFactu[0]->identidad;
             //var_dump($identidad);die();
-            $pathPDF=Reporte::findOne($idReport)->creaReporte($idReport, $identidad);
-        
+            $pathPDF=Reporte::findOne($idReport)->creaReporte($idReport, $identidad);        
             $mailer = new \common\components\Mailer();
             $message =new  \yii\swiftmailer\Message();
             $message->setSubject(Yii::t('sigi.labels','Recibo mensual ').' '.timeHelper::cboMeses()[$this->facturacion->mes].' '.$numerorecibo)
@@ -182,17 +183,19 @@ class SigiKardexdepa extends \common\models\base\modelBase
              ->attach($pathPDF)
             ->SetHtmlBody(timeHelper::saludo().' Estimado residente'
                     . 'adjunto encontrará el recibo correspondiente al mes de '.timeHelper::cboMeses()[$this->facturacion->mes].' Se'
-                    . 'recomienda su pango dentro de los plazos establecidos');
-           
-                try {
-        
+                    . 'recomienda su pago dentro de los plazos establecidos');           
+                try {        
                 $result = $mailer->send($message);
                 $mensajes['success']='Se envió el correo';
+               // $this->enviado=true;$this->save();
+                self::updateAll(['enviado'=>date('Y-m-d H:i:s')], ['id'=>$this->id]);
                     } catch (\Swift_TransportException $Ste) {      
                         $mensajes['error']=$Ste->getMessage();
                     }
             }
             unlink($pathPDF);
+            
+          //\Yii::endProfile('correo_a usuarios');
     return $mensajes;
     }
     

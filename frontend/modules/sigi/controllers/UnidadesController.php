@@ -117,6 +117,7 @@ class UnidadesController extends baseController
         }
         
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            h::session()->setFlash('success',yii::t('base.names','Se guardaron los datos'));
             return $this->redirect(['view', 'id' => $model->id]);
         }
 

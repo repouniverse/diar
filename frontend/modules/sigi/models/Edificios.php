@@ -125,6 +125,11 @@ class Edificios extends \common\models\base\modelBase
     {
         return $this->hasMany(SigiCuentas::className(), ['edificio_id' => 'id']);
     }
+    
+    
+   
+    
+    
      public function getPropietarios()
     {
         return $this->hasMany(SigiPropietarios::className(), ['edificio_id' => 'id']);
@@ -343,6 +348,7 @@ class Edificios extends \common\models\base\modelBase
   
   
   public function verifyIsFacturable(){
+     \Yii::beginProfile('correo_a usuarios');
       /*
        * Primero porlo enos debe de teer un apoderado con falñg junta directiva y con flag emisor por defecto
        */
@@ -409,7 +415,7 @@ class Edificios extends \common\models\base\modelBase
      }
      /*Ahor veriifcar que los medidores ya estan cargados*/
      
-     
+      \Yii::endProfile('correo_a usuarios');
      
      
      

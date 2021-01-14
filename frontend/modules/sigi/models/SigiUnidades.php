@@ -167,6 +167,10 @@ class SigiUnidades extends \common\models\base\modelBase
         return $this->hasOne(SigiTipoUnidades::className(), ['codtipo' => 'codtipo']);
     }
 
+    
+    
+    
+    
     /**
      * @return \yii\db\ActiveQuery
      */
@@ -189,7 +193,6 @@ class SigiUnidades extends \common\models\base\modelBase
     {
         return $this->hasOne(Clipro::className(), ['codpro' => 'codpro']);
     }
-
     /**
      * {@inheritdoc}
      * @return SigiUnidadesQuery the active query used by this AR class.

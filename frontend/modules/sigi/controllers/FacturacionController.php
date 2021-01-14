@@ -421,5 +421,21 @@ public function actionSendRecibo($id){
    }
     
 }
+
+
+public function actionSendMassiveRecibo($id){
+   if (h::request()->isAjax ) {
+        h::response()->format = Response::FORMAT_JSON;
+            $model= $this->findModel($id);
+           if(!is_null($model)){
+               $model->sendMassiveRecibo();
+               return ['success',yii::t('base.labels','Se enviaron masivamente los recibos')];
+                 }            
+          }     
+  }
+  
+ 
+  
+
  
 }
