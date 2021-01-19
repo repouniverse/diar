@@ -64,6 +64,7 @@ class comboHelper extends Combito
           return ArrayHelper::map(
                           \frontend\modules\sigi\models\SigiUnidades::find()
                   ->where(['edificio_id'=>$id_edificio])
+                  //->andWhere(['imputable'=>'1'])
                   ->andWhere(['not', 'id=1'])->all(),
                 'id','numero'); 
       }
@@ -219,6 +220,20 @@ class comboHelper extends Combito
                          \frontend\modules\sigi\models\SigiBasePresupuesto::find()
                   ->andWhere(['edificio_id'=>$edificio_id])->all(),
                 'codigo','descripcion');
+    }
+    
+    public static function getCboUnitsNotChilds($id_edificio){
+     
+        $idsChilds= \frontend\modules\sigi\models\SigiUnidades::find()->
+                select(['id'])->andWhere(['edificio_id'=>$id_edificio])->andWhere(['>','parent_id',0])->column();
+        
+          return ArrayHelper::map(
+                          \frontend\modules\sigi\models\SigiUnidades::find()
+                  ->where(['edificio_id'=>$id_edificio])
+                  ->andWhere(['not',$idsChilds])->all(),
+                'id','numero'); 
+      
+       
     }
     
 }

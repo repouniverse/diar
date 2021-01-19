@@ -119,7 +119,7 @@ class SigiFacturacion extends \common\models\base\modelBase
           $this->refresh();
           //yii::error('El id d efacturacion es');
           ///yii::error($this->id);
-          //$this->createAutoFac(); //cREA LOS RECIBOS AUTOMATICOS DEL PRESUPUESTO
+          $this->createAutoFac(); //cREA LOS RECIBOS AUTOMATICOS DEL PRESUPUESTO
       }
         return parent::afterSave($insert,$changedAttributes );
     }
@@ -562,7 +562,8 @@ class SigiFacturacion extends \common\models\base\modelBase
   public function shortFactu(){
       
       /*Solo unidades padres que sean imputables*/
-     $unidades= $this->edificio->unidadesImputablesPadres();
+     //$unidades= $this->edificio->unidadesImputablesPadres();
+     $unidades= $this->unidadesFacturables();
      $unidadesTransferidas=array_combine(array_column($this->transfEsteMes(),'unidad_id'),array_column($this->transfEsteMes(),'fecha'));
      
      /*Si debe de cobrar masivamente, verifica que el apoderado
@@ -832,4 +833,22 @@ class SigiFacturacion extends \common\models\base\modelBase
       }
   }
    
+ 
+  
+  
+  public function unidadesFacturables(){
+      $idsFacturados=SigiDetfacturacion::find()->select(['unidad_id'])->distinct()->
+              andWhere(['facturacion_id'=>$this->id])->column();
+     yii::error(SigiUnidades::find()->andWhere(['edificio_id'=>$this->edificio_id])->andWhere([
+             'imputable'=>'1',
+                ])->andWhere(['parent_id'=>null])->andWhere(['not in','unidad_id',$idsFacturados])
+             ->createCommand()->rawSql,__FUNCTION__);
+     
+      
+      return SigiUnidades::find()->andWhere(['edificio_id'=>$this->edificio_id])->andWhere([
+             'imputable'=>'1',
+                ])->andWhere(['parent_id'=>null])->andWhere(['not in','id',$idsFacturados])->all();
+  }
+  
+  
 }

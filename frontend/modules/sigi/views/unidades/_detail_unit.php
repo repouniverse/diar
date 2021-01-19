@@ -49,7 +49,7 @@ use common\widgets\linkajaxgridwidget\linkAjaxGridWidget;
                <?php $prop=$model->currentPropietario();?>
               <h3><?=is_null($prop)?'-':$prop->tipo?></h3>
 
-              <p><?=$prop->nombre?></p>
+              <p><?=!is_null($prop)?$prop->nombre:'--'?></p>
             </div>
             <div class="icon">
                 <span style="color:white;opacity:0.5;"><i class="fa fa-users"></i></span>

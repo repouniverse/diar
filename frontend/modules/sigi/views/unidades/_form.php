@@ -39,7 +39,7 @@ use frontend\modules\sigi\models\SigiUnidades;
  <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12"> 
      
     <?php
-    $data=($model->isNewRecord)?[]:comboHelper::getCboSameUnits($model->edificio_id);
+    $data=($model->isNewRecord)?[]:comboHelper::getCboUnitsNotChilds($model->edificio_id);
    echo  $form->field($model, 'parent_id')->
             dropDownList($data,
                   ['prompt'=>'--'.yii::t('base.verbs','Seleccione un valor')."--",

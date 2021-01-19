@@ -380,12 +380,12 @@ class Edificios extends \common\models\base\modelBase
          $score+=3;
          foreach($this->cargos as $cargo){
              if($cargo->getColectores()->count()> 0){
-                foreach($cargo->colectores as  $colector){
+               /* foreach($cargo->colectores as  $colector){
                   if($colector->isBudget() && !($colector->getBasePresupuesto()->count()>0)) {
                       if(!($colector->monto > 0))
                     $this->addError('id',yii::t('sigi.labels','El colector "{colector} " , no tiene partidas presupuestales asignadas  ',['colector'=>$colector->cargo->descargo]));  
-                  } 
-                }
+                }*/
+                 
              }else{
                  $this->addError('id',yii::t('sigi.labels','El grupo "{grupo} " , no tiene ningún colector  ',['grupo'=>$cargo->descripcion]));
                   

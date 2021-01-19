@@ -29,7 +29,7 @@ use frontend\modules\sigi\models\SigiUnidadesSearch;
                  [
                 'class' => 'yii\grid\ActionColumn',
                 //'template' => Helper::filterActionColumn(['view', 'activate', 'delete']),
-            'template' => '{edit}{delete}',
+            'template' => '{edit}{delete}{desacoplar}',
                'buttons' => [
                     'attach' => function($url, $model) {  
                          $url=\yii\helpers\Url::toRoute(['/finder/selectimage','isImage'=>false,'idModal'=>'imagemodal','modelid'=>$model->id,'nombreclase'=> str_replace('\\','_',get_class($model))]);
@@ -48,6 +48,11 @@ use frontend\modules\sigi\models\SigiUnidadesSearch;
                         'delete' => function ($url,$model) {
 			   $url = \yii\helpers\Url::toRoute($this->context->id.'/deletemodel-for-ajax');
                               return \yii\helpers\Html::a('<span class="btn btn-danger glyphicon glyphicon-trash"></span>', '#', ['title'=>$url,/*'id'=>$model->codparam,*/'family'=>'holas','id'=>\yii\helpers\Json::encode(['id'=>$model->id,'modelito'=> str_replace('@','\\',get_class($model))]),/*'title' => 'Borrar'*/]);
+                            },
+                        
+                        'desacoplar' => function ($url,$model) {
+                                 $url = \yii\helpers\Url::toRoute([$this->context->id.'/desacoplar-unidad','id'=>$model->id]);
+                                  return \yii\helpers\Html::a('<span class="btn btn-danger glyphicon glyphicon-lock"></span>', '#', ['title'=>$url,'id'=>$model->id,'family'=>'holas',]);
                             }
                         
                     ]
@@ -73,6 +78,7 @@ use frontend\modules\sigi\models\SigiUnidadesSearch;
             'family'=>'holas',
           'type'=>'POST',
            'evento'=>'click',
+       'posicion'=>\yii\web\View::POS_END,
             //'foreignskeys'=>[1,2,3],
         ]); 
    ?>

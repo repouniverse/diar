@@ -28,7 +28,8 @@
             
         <?php
         
-        foreach($filtrado as $clave=>$fila){ 
+        foreach($filtrado as $clave=>$fila){
+            if($fila['monto']!=0){
              $suministro=(empty(trim($fila['codsuministro'])))?'':'  Cod Suministro : '.(trim($fila['codsuministro']));
      $unidades=(empty(trim($fila['unidades'])))?'':' ( '.(trim($fila['unidades'])).' )  ';
      $lanterior=(empty(trim($fila['lanterior'])))?'':' L. Ant. : '.trim(round($fila['lanterior'],2));
@@ -44,7 +45,9 @@
                  <td width="20%"  align="right" ><?=$fila['simbolo'].'  '.Yii::$app->formatter->asDecimal($fila['montototal'],2)?></td>
                   <td width="20%"   align="right"><?=$fila['simbolo'].'  '.Yii::$app->formatter->asDecimal($fila['monto'],2)?></td>
             </tr>
-        <?php } ?>
+        <?php }
+        }
+        ?>
             <tr>
                 <td width="70%" align="right" ><b>Total</b></td>
                 <td width="20%"  align="right" ><b><?=$subtotalTotal?></b></td>

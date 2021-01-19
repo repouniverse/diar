@@ -664,6 +664,13 @@ public function hasFacturacion($mes,$annio){
 }
 
 
+public function desacopla(){
+    if($this->parent_id>0){
+        $this->parent_id=null;
+       return $this->save();
+    }
+}
+
 
 
 }

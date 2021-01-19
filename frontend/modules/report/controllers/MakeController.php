@@ -455,7 +455,7 @@ class MakeController extends baseController
       $contenidoSinGrilla=$logo.$cabecera; 
          $dataProvider->pagination->page = $i-1; //Set page 1
           $dataProvider->refresh(); //Refresh models
-          $valorAcumulado=$valorAcumulado+$model->sumDataProvider($dataProvider);
+          //$valorAcumulado=$valorAcumulado+$model->sumDataProvider($dataProvider);
          yii::error('renderizando la vista',__FUNCTION__);
           $pageContents[]=trim($this->render('reporte',[
              'modelo'=>$model,             

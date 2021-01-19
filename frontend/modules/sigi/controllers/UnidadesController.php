@@ -441,4 +441,26 @@ class UnidadesController extends baseController
      }
  }
  
+ 
+ public function actionDesacoplarUnidad($id){
+    $model=  SigiUnidades::findOne($id);
+     if(h::request()->isAjax){
+           // $model->load(h::request()->post());
+             h::response()->format = \yii\web\Response::FORMAT_JSON;
+    $cat='';$message='';
+    if(!is_null($model)){
+        if($model->desacopla()){
+            $cat='success';$message=yii::t('base.labels','Se ha desacoplado la unidad');
+        }else{
+           $cat='error';$message=$model->getFirstError(); 
+        }
+    }else{
+        $cat='error';$message=yii::t('base.labels','No se encontró el id para esta unidad');
+    }
+        return [$cat=>$message];
+    }
+}
+
+
+ 
 }
