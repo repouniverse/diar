@@ -6,6 +6,9 @@
 # phpstorm project files
 .idea
 
+# phpstorm project files
+/frontend/web/assets
+
 # netbeans project files
 nbproject
 
