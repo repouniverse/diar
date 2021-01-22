@@ -88,6 +88,10 @@ use common\widgets\buttonajaxwidget\buttonAjaxWidget;
      <?= $form->field($model, 'activo')->checkbox([]) ?>
 
  </div>
+ <div class="col-lg-6 col-md-4 col-sm-6 col-xs-12">
+     <?= $form->field($model, 'recibo')->checkbox([]) ?>
+
+ </div>
   <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
      <?= $form->field($model, 'detalle')->textarea(['rows' => 6]) ?>
 

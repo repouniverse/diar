@@ -484,7 +484,7 @@ class SigiFacturacion extends \common\models\base\modelBase
       throw new ServerErrorHttpException(Yii::t('base.errors', 'No ha especificado la unidad general para  cobranza masiva'));
  return SigiKardexdepa::find()->where([
       'edificio_id'=>$this->edificio,
-      'unidad_id'=>$this->unidad_id,
+      'unidad_id'=>$this->unidad_id,//esta valor es la unidad id de l a
       'facturacion_id'=>$this->id,
       ])->one();
       
@@ -575,6 +575,10 @@ class SigiFacturacion extends \common\models\base\modelBase
        //Obteniendo la unidad Grupal        
       $kardexGrupal=$this->kardexDepaComun();
        $kardexGrupal->refresh();  
+       yii::error('ID kardex grupal',__FUNCTION__);
+        yii::error($kardexGrupal->id,__FUNCTION__);
+     }else{
+        yii::error('NO tiene cobranza masiva',__FUNCTION__);  
      }
       
      foreach($unidades as $unidad){

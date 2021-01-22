@@ -6,32 +6,12 @@ USE common\helpers\h;
 USE common\models\masters\Clipro;
 use Yii;
 
-/**
- * This is the model class for table "{{%sigi_propietarios}}".
- *
- * @property int $id
- * @property int $unidad_id
- * @property string $tipo
- * @property string $correo
- * @property string $correo1
- * @property string $correo2
- * @property string $celulares
- * @property string $fijo
- * @property string $dni
- * @property string $participacion
- * @property string $detalle
- * @property string $activo
- * @property string $finicio
- * @property string $fcese
- *
- * @property SigiUnidades $unidad
- */
 class SigiPropietarios extends \common\models\base\modelBase
 {
     CONST SCENARIO_EMPRESA='empresa';
     CONST SCENARIO_TELEFONO='telefonos_correos';
     //CONST ROL_PROPIETARIO='r_propietario';
-    public $booleanFields=['espropietario','recibemail','activo'];
+    public $booleanFields=['espropietario','recibemail','activo','recibo'];
     /**
      * {@inheritdoc}
      */
@@ -60,7 +40,7 @@ class SigiPropietarios extends \common\models\base\modelBase
             [['participacion'], 'number'],
              [['recibemail','nombre','espropietario','user_id'], 'safe'],
             [['detalle'], 'string'],
-             [['codepa','edificio_id','activo','dni','correo'], 'safe'],
+             [['codepa','edificio_id','activo','dni','correo','recibo'], 'safe'],
             [['dni'], 'valida_dni'],
              //[['activo'], 'safe'],
            // [['correo', 'dni'], 'unique', 'targetAttribute' => ['correo', 'dni']],
@@ -69,7 +49,7 @@ class SigiPropietarios extends \common\models\base\modelBase
             [['id'], 'required', 'on'=>self::SCENARIO_TELEFONO],
             [['tipo'], 'string', 'max' => 1],
              [['correo', 'correo1', 'correo2'], 'email'],
-            [['correo', 'correo1', 'correo2', 'celulares'], 'string', 'max' => 70],
+            [['correo', 'correo1', 'correo2', 'celulares'], 'string', 'max' => 80],
             [['fijo', 'dni'], 'string', 'max' => 12],
             [['finicio', 'fcese'], 'string', 'max' => 10],
             [['edificio_id'], 'exist', 'skipOnError' => true, 'targetClass' => Edificios::className(), 'targetAttribute' => ['edificio_id' => 'id']],
@@ -131,6 +111,14 @@ class SigiPropietarios extends \common\models\base\modelBase
            $this->unidad_id=$this->departamento()->id;            
         }
         return parent::beforeSave($insert);
+    }
+    
+    public function afterSave($insert, $changedAttributes) {
+        RETURN parent::afterSave($insert, $changedAttributes);
+        IF(in_array('recibo',array_keys($changedAttributes)) && $this->recibo
+                && $this->activo){
+           self::updateAll(['recibo'=>'0'],['unidad_id'=>$this->unidad_id,['<>','id',$this->id]]);
+        }
     }
     
     public function departamento(){

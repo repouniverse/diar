@@ -99,6 +99,7 @@ echo $form->field($model, 'codpro')->
  </div>
 
   
+
   <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
      <?= $form->field($model, 'detalles')->textarea([/*'disabled'=>true,*/'rows' => 6]) ?>
 
